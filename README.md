@@ -48,3 +48,5 @@ export default tseslint.config({
   },
 })
 ```
+👉 Visit us at https://friendtested.pro
+
