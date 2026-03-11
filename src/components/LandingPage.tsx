@@ -27,24 +27,24 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
   }
 
   const benefits = [
-    "Search local cleaners your friends and neighbors have actually used",
-    "See who vouched for each cleaner and why — real people, not strangers",
+    "Search local cleaners in Murrieta and Temecula",
+    // "See who vouched for each cleaner and why — real people, not strangers",
   ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
-      <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
-        <Logo size="sm" />
-        {isDev && (
+      {isDev && (
+        <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
+          {/* <Logo size="sm" /> */}
           <button
             onClick={onToggleTheme}
             className="text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-muted transition-colors whitespace-nowrap"
           >
             Theme {theme.toUpperCase()}
           </button>
-        )}
-      </header>
+        </header>
+      )}
 
       <main className="flex-1 flex flex-col">
         {/* ── Brand strip ── */}
@@ -128,7 +128,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
           "
           >
             {/* logo and tagline */}
-            <div className="flex flex-col items-start w-full max-w-2xl mb-4 md:mb-16">
+            <div className="flex flex-col items-start w-full max-w-2xl mb-4 md:mb-12">
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
                 <svg
                   viewBox="0 0 52 48"
@@ -159,12 +159,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
                   Vouched Cleaners
                 </span>
               </div>
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground font-normal leading-snug">
-                Search local cleaners in Temecula and Murrieta
-              </p>
-            </div>
 
-            <div className="w-full max-w-lg flex flex-col">
               {/* Location badge */}
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold mb-6">
                 <svg
@@ -176,7 +171,9 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
                 </svg>
                 Temecula &amp; Murrieta
               </div>
+            </div>
 
+            <div className="w-full max-w-lg flex flex-col">
               {/* Headline — differentiator-led */}
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground leading-[1.15] tracking-tight mb-5">
                 Find a house cleaner your friends{" "}

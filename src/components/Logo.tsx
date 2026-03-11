@@ -1,25 +1,29 @@
 interface LogoProps {
-  className?: string
+  className?: string;
   /** Show the "House cleaners vouched by people you know" tagline */
-  showTagline?: boolean
-  size?: "sm" | "md" | "lg" | "xl"
+  showTagline?: boolean;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
-export function Logo({ className = "", showTagline = false, size = "md" }: LogoProps) {
+export function Logo({
+  className = "",
+  showTagline = false,
+  size = "md",
+}: LogoProps) {
   const iconSize =
-    size === "sm" ? 36 :
-    size === "lg" ? 56 :
-    size === "xl" ? 80 :
-    44
+    size === "sm" ? 36 : size === "lg" ? 56 : size === "xl" ? 80 : 44;
 
   const titleClass =
-    size === "sm" ? "text-lg font-bold" :
-    size === "lg" ? "text-3xl font-bold" :
-    size === "xl" ? "text-4xl sm:text-5xl font-bold" :
-    "text-xl font-bold"
+    size === "sm"
+      ? "text-lg font-bold"
+      : size === "lg"
+        ? "text-3xl font-bold"
+        : size === "xl"
+          ? "text-4xl sm:text-5xl font-bold"
+          : "text-xl font-bold";
 
   const taglineClass =
-    size === "xl" ? "text-base sm:text-lg mt-2" : "text-sm mt-1"
+    size === "xl" ? "text-base sm:text-lg mt-2" : "text-sm mt-1";
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
@@ -53,7 +57,10 @@ export function Logo({ className = "", showTagline = false, size = "md" }: LogoP
 
       {/* Wordmark */}
       <div className="flex flex-col leading-none">
-        <span className={`${titleClass} tracking-tight`} style={{ color: "#2563EB" }}>
+        <span
+          className={`${titleClass} tracking-tight`}
+          style={{ color: "#2563EB" }}
+        >
           Vouched Cleaners
         </span>
         {showTagline && (
@@ -63,5 +70,5 @@ export function Logo({ className = "", showTagline = false, size = "md" }: LogoP
         )}
       </div>
     </div>
-  )
+  );
 }
