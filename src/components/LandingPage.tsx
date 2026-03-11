@@ -130,34 +130,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
             {/* logo and tagline */}
             <div className="flex flex-col items-start w-full max-w-2xl mb-4 md:mb-12">
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
-                <svg
-                  viewBox="0 0 52 48"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  className="w-14 h-14 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 shrink-0"
-                >
-                  <path
-                    d="M3 22L26 3L49 22V45H3V22Z"
-                    stroke="#2563EB"
-                    strokeWidth="3"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                  <path
-                    d="M12 28L21.5 38L40 17"
-                    stroke="#22c55e"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span
-                  className="text-[2rem] sm:text-4xl md:text-5xl font-bold tracking-tight leading-none"
-                  style={{ color: "#2563EB" }}
-                >
-                  Vouched Cleaners
-                </span>
+                <Logo size="xl" />
               </div>
 
               {/* Location badge */}
