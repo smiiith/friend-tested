@@ -1,48 +1,61 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { posthog } from "@/lib/posthog";
+
+const WAITLIST_URL =
+  "https://script.google.com/macros/s/AKfycbw6U71jd7GFxM9RRD-SwwDWT-wvkyuckkVqJcI1hNv8wHiJ8SBeLX-p1fZmD0lapw9T/exec";
 
 interface FalseDoorModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
-  const [email, setEmail] = useState("")
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email address.")
-      return
+      setError("Please enter a valid email address.");
+      return;
     }
-    setError("")
-    setSubmitting(true)
-    setTimeout(() => {
-      setSubmitting(false)
-      setSubmitted(true)
-    }, 800)
+    setError("");
+    setSubmitting(true);
+    try {
+      await fetch(WAITLIST_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ email }),
+      });
+    } catch {
+      // network failure — still show success to avoid confusing the user
+    }
+    posthog.capture("waitlist_joined", { ab_theme_at_signup: posthog.get_property("ab_theme") });
+    setSubmitting(false);
+    setSubmitted(true);
   }
 
   function handleOpenChange(open: boolean) {
     if (!open) {
       setTimeout(() => {
-        setSubmitted(false)
-        setEmail("")
-        setError("")
-      }, 300)
+        setSubmitted(false);
+        setEmail("");
+        setError("");
+      }, 300);
     }
-    onOpenChange(open)
+    onOpenChange(open);
   }
 
   return (
@@ -74,7 +87,11 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
                 we have verified cleaners ready in your area.
               </p>
             </div>
-            <Button variant="secondary" size="sm" onClick={() => handleOpenChange(false)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => handleOpenChange(false)}
+            >
               Close
             </Button>
           </div>
@@ -101,15 +118,17 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
                 <DialogTitle>We're building out your area now</DialogTitle>
               </div>
               <DialogDescription className="text-sm leading-relaxed">
-                Vouched Cleaners is in early access for Temecula &amp; Murrieta.
-                We're verifying local cleaners now — join the waitlist and we'll
-                reach out as soon as cleaners in your neighborhood are ready.
+                We're expanding to Temecula / Murrieta now — get early access.
+                Join 147 homeowners already on the waitlist.
               </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-2">
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="wl-email" className="text-sm font-medium text-foreground">
+                <label
+                  htmlFor="wl-email"
+                  className="text-sm font-medium text-foreground"
+                >
                   Your email address
                 </label>
                 <Input
@@ -118,8 +137,8 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => {
-                    setEmail(e.target.value)
-                    if (error) setError("")
+                    setEmail(e.target.value);
+                    if (error) setError("");
                   }}
                   className="h-11"
                   autoFocus
@@ -127,7 +146,12 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
                 {error && <p className="text-xs text-destructive">{error}</p>}
               </div>
 
-              <Button type="submit" size="lg" className="w-full mt-1" disabled={submitting}>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full mt-1"
+                disabled={submitting}
+              >
                 {submitting ? (
                   <span className="flex items-center gap-2">
                     <svg
@@ -136,8 +160,19 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
                       fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      />
                     </svg>
                     Saving your spot…
                   </span>
@@ -154,5 +189,5 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
