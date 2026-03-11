@@ -1,0 +1,28 @@
+# Vouched Cleaners
+
+## What is this?
+
+Vouched Cleaners is a house cleaning referral service for homeowners in Temecula and Murrieta, California. It helps people find trusted local house cleaners recommended by people they actually know — friends, neighbors, and community members — instead of relying on anonymous reviews from strangers.
+
+## Service Area
+
+- Temecula, CA
+- Murrieta, CA
+
+## Core Value Proposition
+
+- Find house cleaners your neighbors and friends have personally used
+- Recommendations come from real people in your local community, not anonymous strangers
+- An alternative to review platforms like Yelp or Google Reviews for finding home cleaning help
+
+## Current Status
+
+Early access / waitlist. The platform is in active development. Homeowners in Temecula and Murrieta can join the waitlist to be notified when local cleaners are verified and ready in their area.
+
+## Who it's for
+
+Homeowners in Temecula or Murrieta, CA who want to hire a house cleaner they can genuinely trust, and prefer a personal recommendation over anonymous online reviews.
+
+## Key differentiator
+
+Trust through social proof from known individuals, not crowd-sourced ratings from strangers.
