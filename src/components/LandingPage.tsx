@@ -160,7 +160,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
                 </span>
               </div>
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground font-normal leading-snug">
-                Recommended by people you know, not random reviews
+                Search local cleaners in Temecula and Murrieta
               </p>
             </div>
 
@@ -179,15 +179,14 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
 
               {/* Headline — differentiator-led */}
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground leading-[1.15] tracking-tight mb-5">
-                Find a house cleaner your neighbors{" "}
+                Find a house cleaner your friends{" "}
                 <span className="text-primary">actually trust</span>
               </h1>
 
               {/* Subheadline — one clear sentence */}
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-7">
-                Vouched Cleaners connects Temecula &amp; Murrieta homeowners
-                with local cleaners recommended by people they know — not
-                anonymous reviews.
+                Vouched Cleaners connects you with local cleaners recommended by
+                people you know — not anonymous reviews.
               </p>
 
               {/* Benefits — 2 only, distinct from each other */}
