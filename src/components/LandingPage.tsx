@@ -5,7 +5,7 @@ import { FalseDoorModal } from "@/components/FalseDoorModal"
 import { posthog } from "@/lib/posthog"
 
 interface LandingPageProps {
-  theme: "a" | "b"
+  theme: "a" | "b" | "c"
   onToggleTheme?: () => void
   isDev?: boolean
 }
@@ -66,7 +66,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
             <img
               src="/hero.png"
               alt="Two professional house cleaners smiling in a bright kitchen"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-top md:object-center"
               loading="eager"
             />
           </div>
@@ -80,7 +80,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
             md:order-1 md:px-12 md:py-0
             lg:px-20
           ">
-            <div className="w-full max-w-lg">
+            <div className="w-full max-w-lg flex flex-col">
 
               {/* Location badge */}
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold mb-6">
@@ -104,7 +104,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
               </p>
 
               {/* Benefits — 2 only, distinct from each other */}
-              <ul className="flex flex-col gap-3 mb-9">
+              <ul className="flex flex-col gap-3 mb-0 md:mb-9 order-4 md:order-3">
                 {benefits.map((b) => (
                   <li key={b} className="flex items-start gap-3 text-sm sm:text-base text-foreground/80">
                     <span className="mt-0.5 w-5 h-5 rounded-full bg-accent/15 text-accent flex items-center justify-center shrink-0">
@@ -126,7 +126,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
               </ul>
 
               {/* CTA */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-7 md:mb-0 order-3 md:order-4">
                 <Button
                   size="xl"
                   onClick={handleCTA}
