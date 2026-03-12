@@ -16,7 +16,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
 
   function handleCTA() {
     posthog.capture("cta_clicked", {
-      button_label: "Get Early Access",
+      button_label: "Join Free",
       // ab_theme is also sent automatically via the super property registered in App.tsx
     });
     setLoading(true);
@@ -217,7 +217,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
                       Checking your area…
                     </span>
                   ) : (
-                    "Get Early Access →"
+                    "Join Free →"
                   )}
                 </Button>
                 <p className="text-xs text-muted-foreground">
