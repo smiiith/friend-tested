@@ -104,12 +104,12 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
             className="
             order-1
             w-full h-[45vw] max-h-[260px] shrink-0
-            md:order-2 md:w-[45%] md:h-auto md:max-h-none
+            md:order-2 md:w-[55%] md:h-auto md:max-h-none
             relative overflow-hidden
           "
           >
             <img
-              src="/hero.png"
+              src="/cleaner-02-min.png"
               alt="Two professional house cleaners smiling in a bright kitchen"
               className="absolute inset-0 w-full h-full object-cover object-top md:object-center"
               loading="eager"
@@ -123,8 +123,8 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
             flex-1 flex flex-col justify-center
             px-5 py-10
             sm:px-8
-            md:order-1 md:px-12 md:py-0
-            lg:px-20
+            md:order-1 md:px-8 md:py-0
+            lg:px-12
           "
           >
             {/* logo and tagline */}
@@ -146,7 +146,7 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
               </div>
             </div>
 
-            <div className="w-full max-w-lg flex flex-col">
+            <div className="w-full max-w-xl flex flex-col">
               {/* Headline — differentiator-led */}
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground leading-[1.15] tracking-tight mb-5">
                 Find a house cleaner your friends{" "}
