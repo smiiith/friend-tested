@@ -153,11 +153,21 @@ export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
                 <span className="text-primary">actually trust</span>
               </h1>
 
-              {/* Subheadline — one clear sentence */}
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-7">
-                Vouched Cleaners connects you with local cleaners recommended by
-                people you know — not anonymous reviews.
-              </p>
+              {/* Subheadline — icon list */}
+              <ul className="flex flex-col gap-2 mb-7 text-base sm:text-lg text-muted-foreground">
+                {[
+                  "Find cleaners your friends trust.",
+                  "No more anonymous reviews.",
+                  "Hire with confidence.",
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <svg className="w-4 h-4 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
 
               {/* Benefits — 2 only, distinct from each other */}
               <ul className="flex flex-col gap-3 mb-0 md:mb-9 order-4 md:order-3">
