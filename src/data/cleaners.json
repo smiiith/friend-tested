@@ -1,0 +1,102 @@
+[
+  {
+    "id": "casa-bella-pro-cleaning-services",
+    "name": "Casa Bella Pro Cleaning Services",
+    "phone": "(760) 277-0789",
+    "address": "40960 California Oaks Rd, Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "Casa Bella Pro brings a meticulous, detail-oriented approach to residential cleaning in Murrieta and the surrounding Temecula Valley. Their team handles everything from routine weekly maintenance to thorough deep cleans, leaving homes spotless and fresh. With strong reviews and a consistent track record in the California Oaks corridor, they're a trusted name for homeowners who want reliable, professional results every visit.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "the-maids-of-murrieta",
+    "name": "The Maids of Murrieta",
+    "phone": "(951) 304-6243",
+    "address": "41775 Elm St, Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "The Maids of Murrieta is a locally-rooted cleaning service operating out of the heart of Old Town Murrieta. Known for their team-based cleaning system, they work efficiently without cutting corners — ideal for busy families and professionals in the Murrieta and Temecula area. Their consistent 5-star reputation speaks to a crew that shows up on time, communicates well, and takes pride in every home they clean.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
+  },
+  {
+    "id": "maidpro-temecula",
+    "name": "MaidPro Temecula",
+    "phone": "(951) 506-6100",
+    "address": "26856 Adams Ave, Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula", "Wildomar", "Lake Elsinore"],
+    "description": "MaidPro Temecula is part of one of North America's most recognized residential cleaning franchises, bringing professional-grade systems and training to the Temecula Valley. Their 49-Point Checklist ensures nothing gets missed, and their recurring cleaning plans make it easy to maintain a consistently clean home. Serving Murrieta, Temecula, and nearby communities, MaidPro is a dependable choice for homeowners who value consistency and accountability.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Green Cleaning"]
+  },
+  {
+    "id": "a-touch-of-class-cleaning-service",
+    "name": "A Touch of Class Cleaning Service",
+    "phone": "(951) 255-2005",
+    "address": "Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "A Touch of Class Cleaning Service has built a loyal following in Murrieta by delivering exactly what the name promises — a high-standard clean with a personal touch. Owner-operated and deeply familiar with the neighborhoods they serve, they take the time to understand each home's unique needs. Whether you need a one-time refresh or recurring service, A Touch of Class brings the same care and attention every single visit.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "barreras-cleaning-services",
+    "name": "Barreras Cleaning Services",
+    "phone": "(951) 973-2765",
+    "address": "Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "Barreras Cleaning Services is a family-run operation that has been serving Murrieta households with honesty and hard work. They focus on residential cleaning and take a straightforward, no-fuss approach — show up, do great work, and leave the home better than they found it. Their clients appreciate the reliability and the personal relationship that comes with hiring a small, local team that genuinely cares about the community they work in.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "housecleaning-by-christina",
+    "name": "HouseCleaning by Christina",
+    "phone": "(760) 755-0332",
+    "address": "Murrieta, CA 92562",
+    "city": "Murrieta",
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "HouseCleaning by Christina is a solo operator with a well-earned reputation for thoroughness and trustworthiness in the Murrieta area. Christina brings a personal, hands-on approach that larger companies simply can't match — she knows her clients by name and cleans every home as if it were her own. Ideal for homeowners who want to work directly with the person doing the cleaning rather than a rotating crew.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "maid-spotless",
+    "name": "Maid Spotless",
+    "phone": "(951) 303-2952",
+    "address": "Temecula, CA 92590",
+    "city": "Temecula",
+    "serviceArea": ["Temecula", "Murrieta"],
+    "description": "Maid Spotless is a Temecula-based cleaning service known for leaving homes in truly immaculate condition. Their attention to detail goes beyond the basics — think baseboards, ceiling fans, and inside appliances — making them a favorite for deep cleans and move-out situations. Homeowners throughout Temecula's wine country communities and newer developments trust Maid Spotless for regular upkeep and special occasion cleaning alike.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Window Cleaning"]
+  },
+  {
+    "id": "marias-cleaning-service",
+    "name": "Maria's Cleaning Service",
+    "phone": "(951) 691-9651",
+    "address": "Temecula, CA 92590",
+    "city": "Temecula",
+    "serviceArea": ["Temecula", "Murrieta"],
+    "description": "Maria's Cleaning Service has been a staple in the Temecula community for years, building trust through consistent quality and a warm, professional approach. Maria and her team specialize in residential cleaning and have developed a loyal base of clients in neighborhoods from Redhawk to Harveston. Known for being easy to reach, flexible with scheduling, and thorough in their work, Maria's is a top choice for families looking for a cleaner they can count on week after week.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "your-favorite-cleaners",
+    "name": "Your Favorite Cleaners",
+    "phone": "(951) 428-4268",
+    "address": "Temecula, CA 92591",
+    "city": "Temecula",
+    "serviceArea": ["Temecula", "Murrieta", "Fallbrook"],
+    "description": "With over 200 five-star reviews, Your Favorite Cleaners has earned its name across Temecula and beyond. They serve both residential and commercial clients, bringing the same high-energy professionalism to every job. Their team is prompt, thorough, and friendly — qualities that have kept clients coming back for years. Whether you need a recurring home clean or a full office refresh, Your Favorite Cleaners delivers results that justify the hype.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Office Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "molly-maid-of-temecula-valley",
+    "name": "Molly Maid of Temecula Valley",
+    "phone": "(951) 374-1754",
+    "address": "27665 Jefferson Ave, Temecula, CA 92590",
+    "city": "Temecula",
+    "serviceArea": ["Temecula", "Murrieta", "Wildomar", "Menifee"],
+    "description": "Molly Maid of Temecula Valley brings the reliability and training standards of a nationally-recognized brand with the local knowledge of a team that knows the Temecula Valley inside and out. Operating from their Jefferson Avenue location, they serve homeowners throughout the region with customizable cleaning plans, background-checked team members, and a satisfaction guarantee. A strong choice for anyone who wants professional, insured cleaning without the uncertainty of an unknown provider.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Recurring Plans"]
+  }
+]
