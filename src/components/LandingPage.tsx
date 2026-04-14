@@ -78,75 +78,93 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         {/* Text */}
         <div className="relative h-full flex flex-col justify-center px-6 sm:px-10 md:px-14 max-w-2xl">
+          <img
+            src="/logos/friend-tested-cleaners-light-blue.png"
+            alt="Friend Tested Cleaners"
+            className="h-12 w-auto self-start mb-3 drop-shadow"
+          />
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight mb-3 drop-shadow">
             House Cleaners in Murrieta &amp; Temecula
           </h1>
-          <p className="text-sm sm:text-base text-white/85 max-w-md">
+          <p className="text-sm sm:text-base text-white/85 max-w-md mb-3">
             Vetted local cleaning services recommended by your neighbors — not
             anonymous reviews.
+          </p>
+          <p className="text-xs text-white/60 font-medium tracking-wide uppercase">
+            10 vetted cleaners &bull; Temecula Valley
           </p>
         </div>
       </section>
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-5 md:px-8 py-10">
+      <main className="flex-1 w-full">
         {/* ── Murrieta section ── */}
-        <CleanerSection
-          title="House Cleaners in Murrieta, CA"
-          cleaners={murrieta}
-          expandedId={expandedId}
-          onToggle={handleMoreToggle}
-          onPhoneClick={handlePhoneClick}
-          onBookOnline={handleBookOnline}
-        />
+        <div className="max-w-4xl mx-auto px-5 md:px-8 pt-10">
+          <CleanerSection
+            title="House Cleaners in Murrieta, CA"
+            cleaners={murrieta}
+            expandedId={expandedId}
+            onToggle={handleMoreToggle}
+            onPhoneClick={handlePhoneClick}
+            onBookOnline={handleBookOnline}
+          />
+        </div>
 
-        {/* ── Temecula section ── */}
-        <CleanerSection
-          title="House Cleaners in Temecula, CA"
-          cleaners={temecula}
-          expandedId={expandedId}
-          onToggle={handleMoreToggle}
-          onPhoneClick={handlePhoneClick}
-          onBookOnline={handleBookOnline}
-        />
-
-        {/* ── Browse by neighborhood ── */}
-        <section className="mb-10">
-          <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
-            Browse by Neighborhood
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {neighborhoodsData.map((n) => (
-              <Link
-                key={n.id}
-                to={`/neighborhoods/${n.id}`}
-                className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
-              >
-                {n.name}, {n.city}
-              </Link>
-            ))}
+        {/* ── Temecula section — tinted band ── */}
+        <div className="w-full bg-primary/5 border-y border-border/40 py-10">
+          <div className="max-w-4xl mx-auto px-5 md:px-8">
+            <CleanerSection
+              title="House Cleaners in Temecula, CA"
+              cleaners={temecula}
+              expandedId={expandedId}
+              onToggle={handleMoreToggle}
+              onPhoneClick={handlePhoneClick}
+              onBookOnline={handleBookOnline}
+            />
           </div>
-        </section>
+        </div>
 
-        {/* ── SEO body copy ── */}
-        <section className="mt-4 pt-8 border-t border-border/50 prose prose-sm max-w-none text-muted-foreground">
-          <h2 className="text-base font-semibold text-foreground mb-2">
-            Finding a Reliable Maid Service in Murrieta &amp; Temecula
-          </h2>
-          <p className="text-sm leading-relaxed">
-            Whether you need weekly housekeeping, a one-time deep clean, or a
-            move-out cleaning in Murrieta or Temecula, the right cleaner makes
-            all the difference. Friend Tested Cleaners is a directory of local
-            home cleaning services in the Temecula Valley — from established
-            franchises like MaidPro and Molly Maid to independent cleaners who
-            know your neighborhood by name. Browse listings above to find a
-            house cleaner near you, or click any name to learn more about their
-            services and coverage area.
-          </p>
-        </section>
+        <div className="max-w-4xl mx-auto px-5 md:px-8 py-10">
+          {/* ── Browse by neighborhood ── */}
+          <section className="mb-10">
+            <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
+              Browse by Neighborhood
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {neighborhoodsData.map((n) => (
+                <Link
+                  key={n.id}
+                  to={`/neighborhoods/${n.id}`}
+                  className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
+                >
+                  {n.name}, {n.city}
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* ── SEO body copy ── */}
+          <section className="mt-4 pt-8 border-t border-border/50 prose prose-sm max-w-none text-muted-foreground">
+            <h2 className="text-base font-semibold text-foreground mb-2">
+              Finding a Reliable Maid Service in Murrieta &amp; Temecula
+            </h2>
+            <p className="text-sm leading-relaxed">
+              Whether you need weekly housekeeping, a one-time deep clean, or a
+              move-out cleaning in Murrieta or Temecula, the right cleaner makes
+              all the difference. Friend Tested Cleaners is a community-curated
+              directory of independent local cleaning services in the Temecula
+              Valley — not a paid listing service. Browse listings above to find
+              a house cleaner near you, or click any name to learn more about
+              their services and coverage area.
+            </p>
+          </section>
+        </div>
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
+      <footer className="border-t border-border/60 py-6 px-5 md:px-10">
+        <p className="text-xs text-center text-muted-foreground mb-1">
+          Friend Tested Cleaners is a community-curated directory, not a paid listing service. Every cleaner is independently operated and serves the Temecula Valley.
+        </p>
         <p className="text-xs text-center text-muted-foreground">
           &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
           Temecula &amp; Murrieta, CA
@@ -230,13 +248,7 @@ interface CleanerCardProps {
   onBookOnline: () => void;
 }
 
-function CleanerCard({
-  cleaner,
-  expanded,
-  onToggle,
-  onPhoneClick,
-  onBookOnline,
-}: CleanerCardProps) {
+function CleanerCard({ cleaner, expanded, onToggle, onPhoneClick, onBookOnline }: CleanerCardProps) {
   return (
     <div className="rounded-[var(--radius)] border border-border bg-card shadow-sm overflow-hidden">
       {/* Top accent bar */}
@@ -263,9 +275,9 @@ function CleanerCard({
           className="shrink-0 gap-1 mt-0.5"
         >
           {expanded ? (
-            <>Less <ChevronUp className="w-3.5 h-3.5" /></>
+            <>Close <ChevronUp className="w-3.5 h-3.5" /></>
           ) : (
-            <>More <ChevronDown className="w-3.5 h-3.5" /></>
+            <>Contact <ChevronDown className="w-3.5 h-3.5" /></>
           )}
         </Button>
       </div>
