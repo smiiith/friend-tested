@@ -26,7 +26,7 @@ export function LandingPage() {
     if (meta) {
       meta.setAttribute(
         "content",
-        "Find vetted local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services recommended by your neighbors.",
+        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services recommended by your neighbors.",
       );
     }
   }, []);
@@ -91,7 +91,7 @@ export function LandingPage() {
             Murrieta, Temecula, and the Temecula Valley.
           </p>
           <p className="text-xs text-white/60 font-medium tracking-wide uppercase">
-            10 vetted cleaners &bull; Temecula Valley
+            10 cleaners &bull; Temecula Valley
           </p>
         </div>
       </section>

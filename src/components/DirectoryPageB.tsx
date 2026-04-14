@@ -27,7 +27,7 @@ export function DirectoryPageB() {
     if (meta) {
       meta.setAttribute(
         "content",
-        "Find vetted local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors.",
+        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors.",
       );
     }
   }, []);
