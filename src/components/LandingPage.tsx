@@ -84,11 +84,11 @@ export function LandingPage() {
             className="h-12 w-auto self-start mb-3 drop-shadow"
           />
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight mb-3 drop-shadow">
-            House Cleaners in Murrieta &amp; Temecula
+            Find a House Cleaner Near You
           </h1>
           <p className="text-sm sm:text-base text-white/85 max-w-md mb-3">
-            Vetted local cleaning services recommended by your neighbors — not
-            anonymous reviews.
+            Browse house cleaners, maid services, and cleaning companies in
+            Murrieta, Temecula, and the Temecula Valley.
           </p>
           <p className="text-xs text-white/60 font-medium tracking-wide uppercase">
             10 vetted cleaners &bull; Temecula Valley
@@ -163,7 +163,9 @@ export function LandingPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-6 px-5 md:px-10">
         <p className="text-xs text-center text-muted-foreground mb-1">
-          Friend Tested Cleaners is a community-curated directory, not a paid listing service. Every cleaner is independently operated and serves the Temecula Valley.
+          Friend Tested Cleaners is a community-curated directory, not a paid
+          listing service. Every cleaner is independently operated and serves
+          the Temecula Valley.
         </p>
         <p className="text-xs text-center text-muted-foreground">
           &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
@@ -248,7 +250,13 @@ interface CleanerCardProps {
   onBookOnline: () => void;
 }
 
-function CleanerCard({ cleaner, expanded, onToggle, onPhoneClick, onBookOnline }: CleanerCardProps) {
+function CleanerCard({
+  cleaner,
+  expanded,
+  onToggle,
+  onPhoneClick,
+  onBookOnline,
+}: CleanerCardProps) {
   return (
     <div className="rounded-[var(--radius)] border border-border bg-card shadow-sm overflow-hidden">
       {/* Top accent bar */}
@@ -275,9 +283,13 @@ function CleanerCard({ cleaner, expanded, onToggle, onPhoneClick, onBookOnline }
           className="shrink-0 gap-1 mt-0.5"
         >
           {expanded ? (
-            <>Close <ChevronUp className="w-3.5 h-3.5" /></>
+            <>
+              Close <ChevronUp className="w-3.5 h-3.5" />
+            </>
           ) : (
-            <>Contact <ChevronDown className="w-3.5 h-3.5" /></>
+            <>
+              Contact <ChevronDown className="w-3.5 h-3.5" />
+            </>
           )}
         </Button>
       </div>
@@ -285,7 +297,10 @@ function CleanerCard({ cleaner, expanded, onToggle, onPhoneClick, onBookOnline }
       {/* Service chips */}
       <div className="px-4 pb-3 flex flex-wrap gap-1.5">
         {cleaner.services.slice(0, 3).map((s) => (
-          <span key={s} className="px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
+          <span
+            key={s}
+            className="px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground text-xs font-medium"
+          >
             {s}
           </span>
         ))}

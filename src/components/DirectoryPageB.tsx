@@ -13,7 +13,7 @@ import { posthog } from "@/lib/posthog";
 import cleanersData from "@/data/cleaners.json";
 import neighborhoodsData from "@/data/neighborhoods.json";
 
-type Cleaner = typeof cleanersData[0];
+type Cleaner = (typeof cleanersData)[0];
 type CityFilter = "all" | "Murrieta" | "Temecula";
 
 export function DirectoryPageB() {
@@ -21,18 +21,21 @@ export function DirectoryPageB() {
   const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
 
   useEffect(() => {
-    document.title = "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
+    document.title =
+      "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
         "content",
-        "Find vetted local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors."
+        "Find vetted local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors.",
       );
     }
   }, []);
 
   const filtered =
-    filter === "all" ? cleanersData : cleanersData.filter((c) => c.city === filter);
+    filter === "all"
+      ? cleanersData
+      : cleanersData.filter((c) => c.city === filter);
 
   function handlePhoneClick(cleaner: Cleaner) {
     posthog.capture("phone_number_clicked", {
@@ -48,14 +51,18 @@ export function DirectoryPageB() {
       {/* ── Hero banner ── */}
       <header className="bg-card border-b border-border py-12 px-5 text-center">
         <div className="flex justify-center mb-6">
-          <img src="/logos/friend-tested-cleaners-black.png" alt="Friend Tested Cleaners" className="h-20 w-auto" />
+          <img
+            src="/logos/friend-tested-cleaners-black.png"
+            alt="Friend Tested Cleaners"
+            className="h-20 w-auto"
+          />
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 leading-tight text-foreground">
-          Trusted House Cleaners in<br className="hidden sm:block" /> Murrieta &amp; Temecula
+          Find a House Cleaner Near You
         </h1>
         <p className="text-muted-foreground max-w-lg mx-auto text-base">
-          Browse local maid services and cleaning companies serving Murrieta,
-          Temecula, and the Temecula Valley — vetted and recommended by your neighbors.
+          Browse house cleaners, maid services, and cleaning companies in
+          Murrieta, Temecula, and the Temecula Valley.
         </p>
       </header>
 
@@ -118,8 +125,8 @@ export function DirectoryPageB() {
           <p className="text-sm leading-relaxed">
             Whether you need weekly housekeeping, a one-time deep clean, or a
             move-out cleaning in Murrieta or Temecula, the right cleaner makes
-            all the difference. Friend Tested Cleaners is a directory of local home
-            cleaning services in the Temecula Valley — from established
+            all the difference. Friend Tested Cleaners is a directory of local
+            home cleaning services in the Temecula Valley — from established
             franchises like MaidPro and Molly Maid to trusted independent
             cleaners who know your neighborhood by name. Browse listings above
             to find a house cleaner near you, or click any name to learn more.
@@ -130,15 +137,17 @@ export function DirectoryPageB() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
-          &amp; Murrieta, CA
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
+          Temecula &amp; Murrieta, CA
         </p>
       </footer>
 
       {/* ── Book Online Dialog ── */}
       <Dialog
         open={bookingCleaner !== null}
-        onOpenChange={(open) => { if (!open) setBookingCleaner(null); }}
+        onOpenChange={(open) => {
+          if (!open) setBookingCleaner(null);
+        }}
       >
         <DialogContent>
           <DialogHeader>
