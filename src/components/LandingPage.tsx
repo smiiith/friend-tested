@@ -1,253 +1,281 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
-import { FalseDoorModal } from "@/components/FalseDoorModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { posthog } from "@/lib/posthog";
+import cleanersData from "@/data/cleaners.json";
+import neighborhoodsData from "@/data/neighborhoods.json";
 
-interface LandingPageProps {
-  theme: "a" | "b" | "c";
-  onToggleTheme?: () => void;
-  isDev?: boolean;
-}
+type Cleaner = typeof cleanersData[0];
 
-export function LandingPage({ theme, onToggleTheme, isDev }: LandingPageProps) {
-  const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+export function LandingPage() {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
 
-  function handleCTA() {
-    posthog.capture("cta_clicked", {
-      button_label: "Join Free",
-      // ab_theme is also sent automatically via the super property registered in App.tsx
-    });
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setModalOpen(true);
-    }, 1200);
+  useEffect(() => {
+    document.title = "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.setAttribute(
+        "content",
+        "Find vetted local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors."
+      );
+    }
+  }, []);
+
+  function handleMoreToggle(id: string) {
+    setExpandedId((prev) => (prev === id ? null : id));
   }
 
-  const benefits = [
-    "Search local cleaners in Murrieta and Temecula",
-    // "See who vouched for each cleaner and why — real people, not strangers",
-  ];
+  function handlePhoneClick(cleaner: Cleaner) {
+    posthog.capture("phone_number_clicked", {
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
+      page: "directory",
+    });
+  }
+
+  function handleBookOnline(cleaner: Cleaner) {
+    setBookingCleaner(cleaner);
+  }
+
+  const murrieta = cleanersData.filter((c) => c.city === "Murrieta");
+  const temecula = cleanersData.filter((c) => c.city === "Temecula");
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
-      {isDev && (
-        <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
-          {/* <Logo size="sm" /> */}
-          <button
-            onClick={onToggleTheme}
-            className="text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-muted transition-colors whitespace-nowrap"
-          >
-            Theme {theme.toUpperCase()}
-          </button>
-        </header>
-      )}
+      <header className="w-full px-5 md:px-10 py-4 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
+        <img src="/logos/friend-tested-cleaners-dark-blue.png" alt="Friend Tested Cleaners" className="h-14 w-auto" />
+        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+          <MapPin className="w-3 h-3" />
+          Temecula &amp; Murrieta, CA
+        </span>
+      </header>
 
-      <main className="flex-1 flex flex-col">
-        {/* ── Brand strip ── */}
-        {/* <section
-          className="
-          border-t border-border/40
-          bg-gradient-to-br from-white via-slate-50 to-blue-50/60
-          flex items-center justify-center
-          py-10 px-8 sm:px-12 mb-8
-        "
-        >
-          <div className="flex flex-col items-start w-full max-w-2xl">
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
-              <svg
-                viewBox="0 0 52 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                className="w-14 h-14 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 shrink-0"
+      {/* ── Hero ── */}
+      <section className="relative w-full h-64 sm:h-80 overflow-hidden">
+        <img
+          src="/hero/temecula-park-1-min.png"
+          alt="Temecula park and lake"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+        />
+        {/* Gradient overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        {/* Text */}
+        <div className="relative h-full flex flex-col justify-center px-6 sm:px-10 md:px-14 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight mb-3 drop-shadow">
+            Trusted House Cleaners in Murrieta &amp; Temecula
+          </h1>
+          <p className="text-sm sm:text-base text-white/85 max-w-md">
+            Vetted local cleaning services recommended by your neighbors — not anonymous reviews.
+          </p>
+        </div>
+      </section>
+
+      <main className="flex-1 w-full max-w-4xl mx-auto px-5 md:px-8 py-10">
+
+        {/* ── Murrieta section ── */}
+        <CleanerSection
+          title="House Cleaners in Murrieta, CA"
+          cleaners={murrieta}
+          expandedId={expandedId}
+          onToggle={handleMoreToggle}
+          onPhoneClick={handlePhoneClick}
+          onBookOnline={handleBookOnline}
+        />
+
+        {/* ── Temecula section ── */}
+        <CleanerSection
+          title="House Cleaners in Temecula, CA"
+          cleaners={temecula}
+          expandedId={expandedId}
+          onToggle={handleMoreToggle}
+          onPhoneClick={handlePhoneClick}
+          onBookOnline={handleBookOnline}
+        />
+
+        {/* ── Browse by neighborhood ── */}
+        <section className="mb-10">
+          <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
+            Browse by Neighborhood
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {neighborhoodsData.map((n) => (
+              <Link
+                key={n.id}
+                to={`/neighborhoods/${n.id}`}
+                className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
               >
-                <path
-                  d="M3 22L26 3L49 22V45H3V22Z"
-                  stroke="#2563EB"
-                  strokeWidth="3"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-                <path
-                  d="M12 28L21.5 38L40 17"
-                  stroke="#22c55e"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span
-                className="text-[2rem] sm:text-4xl md:text-5xl font-bold tracking-tight leading-none"
-                style={{ color: "#2563EB" }}
-              >
-                Vouched Cleaners
-              </span>
-            </div>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground font-normal leading-snug">
-              House cleaners vouched by people you know
-            </p>
+                {n.name}, {n.city}
+              </Link>
+            ))}
           </div>
-        </section> */}
+        </section>
 
-        {/* ── Hero ── */}
-        {/*
-          Mobile:  image strip (top) → copy below
-          Desktop: copy left (55%) | image right (45%), fills viewport height
-        */}
-        <section className="flex flex-col md:flex-row md:min-h-[calc(100vh-57px)]">
-          {/* Image — top strip on mobile, right column on desktop */}
-          <div
-            className="
-            order-1
-            w-full h-[45vw] max-h-[260px] shrink-0
-            md:order-2 md:w-[55%] md:h-auto md:max-h-none
-            relative overflow-hidden
-          "
-          >
-            <img
-              src="/cleaner-02-min.png"
-              alt="Two professional house cleaners smiling in a bright kitchen"
-              className="absolute inset-0 w-full h-full object-cover object-top md:object-center"
-              loading="eager"
-            />
-          </div>
-
-          {/* Copy — below image on mobile, left column on desktop */}
-          <div
-            className="
-            order-2
-            flex-1 flex flex-col justify-center
-            px-5 py-10
-            sm:px-8
-            md:order-1 md:px-8 md:py-0
-            lg:px-12
-          "
-          >
-            {/* logo and tagline */}
-            <div className="flex flex-col items-start w-full max-w-2xl mb-4 md:mb-12">
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
-                <Logo size="xl" />
-              </div>
-
-              {/* Location badge */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold mb-6">
-                <svg
-                  className="w-3 h-3"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                </svg>
-                Temecula &amp; Murrieta
-              </div>
-            </div>
-
-            <div className="w-full max-w-xl flex flex-col">
-              {/* Headline — differentiator-led */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground leading-[1.15] tracking-tight mb-5">
-                Find a house cleaner your friends{" "}
-                <span className="text-primary">actually trust</span>
-              </h1>
-
-              {/* Subheadline — icon list */}
-              <ul className="flex flex-col gap-2 mb-7 text-base sm:text-lg text-muted-foreground">
-                {[
-                  "Find cleaners your friends trust.",
-                  "No more anonymous reviews.",
-                  "Hire with confidence.",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <svg className="w-4 h-4 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Benefits — 2 only, distinct from each other */}
-              <ul className="flex flex-col gap-3 mb-0 md:mb-9 order-4 md:order-3">
-                {benefits.map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-start gap-3 text-sm sm:text-base text-foreground/80"
-                  >
-                    <span className="mt-0.5 w-5 h-5 rounded-full bg-accent/15 text-accent flex items-center justify-center shrink-0">
-                      <svg
-                        className="w-3 h-3"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M20 6L9 17l-5-5" />
-                      </svg>
-                    </span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-7 md:mb-0 order-3 md:order-4">
-                <Button
-                  size="xl"
-                  onClick={handleCTA}
-                  disabled={loading}
-                  className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/35 transition-shadow"
-                >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <svg
-                        className="animate-spin h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                        />
-                      </svg>
-                      Checking your area…
-                    </span>
-                  ) : (
-                    "Join Free →"
-                  )}
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  Free &bull; No credit card needed
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* ── SEO body copy ── */}
+        <section className="mt-4 pt-8 border-t border-border/50 prose prose-sm max-w-none text-muted-foreground">
+          <h2 className="text-base font-semibold text-foreground mb-2">
+            Finding a Reliable Maid Service in Murrieta &amp; Temecula
+          </h2>
+          <p className="text-sm leading-relaxed">
+            Whether you need weekly housekeeping, a one-time deep clean, or a
+            move-out cleaning in Murrieta or Temecula, the right cleaner makes
+            all the difference. Friend Tested Cleaners is a directory of local home
+            cleaning services in the Temecula Valley — from established franchises
+            like MaidPro and Molly Maid to trusted independent cleaners who know
+            your neighborhood by name. Browse listings above to find a house
+            cleaner near you, or click any name to learn more about their services
+            and coverage area.
+          </p>
         </section>
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/60 py-4 px-5 md:px-10">
+      <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Vouched Cleaners &bull; Temecula
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
           &amp; Murrieta, CA
         </p>
       </footer>
 
-      <FalseDoorModal open={modalOpen} onOpenChange={setModalOpen} />
+      {/* ── Book Online Dialog ── */}
+      <Dialog
+        open={bookingCleaner !== null}
+        onOpenChange={(open) => { if (!open) setBookingCleaner(null); }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Online Booking Unavailable</DialogTitle>
+            <DialogDescription>
+              {bookingCleaner?.name} doesn't support online booking yet. Please
+              call them directly to schedule:
+            </DialogDescription>
+          </DialogHeader>
+          {bookingCleaner && (
+            <a
+              href={`tel:${bookingCleaner.phone.replace(/\D/g, "")}`}
+              onClick={() => handlePhoneClick(bookingCleaner)}
+              className="inline-flex items-center gap-2 text-lg font-semibold text-primary hover:underline"
+            >
+              <Phone className="w-5 h-5" />
+              {bookingCleaner.phone}
+            </a>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+interface CleanerSectionProps {
+  title: string;
+  cleaners: Cleaner[];
+  expandedId: string | null;
+  onToggle: (id: string) => void;
+  onPhoneClick: (cleaner: Cleaner) => void;
+  onBookOnline: (cleaner: Cleaner) => void;
+}
+
+function CleanerSection({
+  title,
+  cleaners,
+  expandedId,
+  onToggle,
+  onPhoneClick,
+  onBookOnline,
+}: CleanerSectionProps) {
+  return (
+    <section className="mb-10">
+      <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
+        {title}
+      </h2>
+      <div className="flex flex-col gap-3">
+        {cleaners.map((cleaner) => (
+          <CleanerCard
+            key={cleaner.id}
+            cleaner={cleaner}
+            expanded={expandedId === cleaner.id}
+            onToggle={() => onToggle(cleaner.id)}
+            onPhoneClick={() => onPhoneClick(cleaner)}
+            onBookOnline={() => onBookOnline(cleaner)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+interface CleanerCardProps {
+  cleaner: Cleaner;
+  expanded: boolean;
+  onToggle: () => void;
+  onPhoneClick: () => void;
+  onBookOnline: () => void;
+}
+
+function CleanerCard({
+  cleaner,
+  expanded,
+  onToggle,
+  onPhoneClick,
+  onBookOnline,
+}: CleanerCardProps) {
+  return (
+    <div className="rounded-[var(--radius)] border border-border bg-card shadow-sm overflow-hidden">
+      {/* Card header row */}
+      <div className="flex items-center justify-between px-4 py-4 gap-3">
+        <div className="flex-1 min-w-0">
+          <Link
+            to={`/cleaners/${cleaner.id}`}
+            className="font-semibold text-foreground hover:text-primary hover:underline truncate block"
+          >
+            {cleaner.name}
+          </Link>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {cleaner.services.slice(0, 3).join(" · ")}
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onToggle}
+          aria-expanded={expanded}
+          className="shrink-0 gap-1"
+        >
+          {expanded ? (
+            <>Less <ChevronUp className="w-3.5 h-3.5" /></>
+          ) : (
+            <>More <ChevronDown className="w-3.5 h-3.5" /></>
+          )}
+        </Button>
+      </div>
+
+      {/* Expanded panel */}
+      {expanded && (
+        <div className="px-4 pb-4 pt-1 border-t border-border/50 flex flex-col sm:flex-row sm:items-center gap-3">
+          <a
+            href={`tel:${cleaner.phone.replace(/\D/g, "")}`}
+            onClick={onPhoneClick}
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            <Phone className="w-4 h-4 shrink-0" />
+            {cleaner.phone}
+          </a>
+          <Button size="sm" onClick={onBookOnline} className="sm:ml-auto">
+            Book Online
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
