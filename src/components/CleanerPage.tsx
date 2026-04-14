@@ -15,13 +15,7 @@ import cleanersData from "@/data/cleaners.json";
 
 type Cleaner = typeof cleanersData[0];
 
-interface CleanerPageProps {
-  theme: "a" | "b" | "c";
-  onToggleTheme?: () => void;
-  isDev?: boolean;
-}
-
-export function CleanerPage({ theme, onToggleTheme, isDev }: CleanerPageProps) {
+export function CleanerPage() {
   const { slug } = useParams<{ slug: string }>();
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -108,20 +102,10 @@ export function CleanerPage({ theme, onToggleTheme, isDev }: CleanerPageProps) {
       {/* ── Nav ── */}
       <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
         <Logo size="sm" />
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="w-3 h-3" />
-            Temecula &amp; Murrieta, CA
-          </span>
-          {isDev && (
-            <button
-              onClick={onToggleTheme}
-              className="ml-3 text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:bg-muted transition-colors whitespace-nowrap"
-            >
-              Theme {theme.toUpperCase()}
-            </button>
-          )}
-        </div>
+        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+          <MapPin className="w-3 h-3" />
+          Temecula &amp; Murrieta, CA
+        </span>
       </header>
 
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 md:px-8 py-10">
