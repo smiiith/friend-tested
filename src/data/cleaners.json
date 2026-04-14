@@ -20,14 +20,14 @@
     "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
   },
   {
-    "id": "maidpro-temecula",
-    "name": "MaidPro Temecula",
-    "phone": "(951) 506-6100",
-    "address": "26856 Adams Ave, Murrieta, CA 92562",
+    "id": "julies-house-cleaning-services",
+    "name": "Julie's House Cleaning Services",
+    "phone": "(714) 833-8936",
+    "address": "Murrieta, CA 92562",
     "city": "Murrieta",
-    "serviceArea": ["Murrieta", "Temecula", "Wildomar", "Lake Elsinore"],
-    "description": "MaidPro Temecula is part of one of North America's most recognized residential cleaning franchises, bringing professional-grade systems and training to the Temecula Valley. Their 49-Point Checklist ensures nothing gets missed, and their recurring cleaning plans make it easy to maintain a consistently clean home. Serving Murrieta, Temecula, and nearby communities, MaidPro is a dependable choice for homeowners who value consistency and accountability.",
-    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Green Cleaning"]
+    "serviceArea": ["Murrieta", "Temecula"],
+    "description": "Julie's House Cleaning Services is an owner-operated cleaning business based in Murrieta, built on personal attention and a genuine commitment to leaving every home spotless. Julie handles each job herself or with a small trusted crew, meaning you always know who's coming through your door. Her clients appreciate the consistency, the care she takes with their belongings, and the kind of reliable communication you simply don't get from a franchise.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
   },
   {
     "id": "a-touch-of-class-cleaning-service",
@@ -90,13 +90,13 @@
     "services": ["Regular Cleaning", "Deep Cleaning", "Office Cleaning", "Move-In/Move-Out Cleaning"]
   },
   {
-    "id": "molly-maid-of-temecula-valley",
-    "name": "Molly Maid of Temecula Valley",
-    "phone": "(951) 374-1754",
-    "address": "27665 Jefferson Ave, Temecula, CA 92590",
+    "id": "marthas-and-company-cleaning-services",
+    "name": "Martha's and Company Cleaning Services",
+    "phone": "(951) 546-3837",
+    "address": "Temecula, CA 92590",
     "city": "Temecula",
-    "serviceArea": ["Temecula", "Murrieta", "Wildomar", "Menifee"],
-    "description": "Molly Maid of Temecula Valley brings the reliability and training standards of a nationally-recognized brand with the local knowledge of a team that knows the Temecula Valley inside and out. Operating from their Jefferson Avenue location, they serve homeowners throughout the region with customizable cleaning plans, background-checked team members, and a satisfaction guarantee. A strong choice for anyone who wants professional, insured cleaning without the uncertainty of an unknown provider.",
-    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Recurring Plans"]
+    "serviceArea": ["Temecula", "Murrieta"],
+    "description": "Martha's and Company Cleaning Services is a local, independently owned cleaning business serving the Temecula area. Martha and her team bring a warm, professional approach to every home they clean — the kind of personalized service that keeps clients coming back. Whether you need a thorough one-time clean or reliable recurring housekeeping, Martha's is the type of local cleaner that quickly becomes a trusted part of your household routine.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
   }
 ]
