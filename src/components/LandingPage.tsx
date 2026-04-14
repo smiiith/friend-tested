@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronUp, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +19,7 @@ export function LandingPage() {
   const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
 
   useEffect(() => {
-    document.title = "Vouched Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
+    document.title = "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
@@ -53,43 +52,36 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
-      <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
-        <Logo size="sm" />
+      <header className="w-full px-5 md:px-10 py-4 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
+        <img src="/logos/friend-tested-cleaners-dark-blue.png" alt="Friend Tested Cleaners" className="h-14 w-auto" />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
           Temecula &amp; Murrieta, CA
         </span>
       </header>
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-5 md:px-8 py-10">
-        {/* ── Hero ── */}
-        <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground leading-tight tracking-tight mb-3">
-            Trusted House Cleaners in{" "}
-            <span className="text-primary">Murrieta &amp; Temecula</span>
+      {/* ── Hero ── */}
+      <section className="relative w-full h-64 sm:h-80 overflow-hidden">
+        <img
+          src="/hero/temecula-park-1-min.png"
+          alt="Temecula park and lake"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+        />
+        {/* Gradient overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        {/* Text */}
+        <div className="relative h-full flex flex-col justify-center px-6 sm:px-10 md:px-14 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight mb-3 drop-shadow">
+            Trusted House Cleaners in Murrieta &amp; Temecula
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-4">
-            Browse vetted local house cleaning and maid services serving Murrieta,
-            Temecula, Redhawk, Harveston, California Oaks, and surrounding
-            Temecula Valley communities.
+          <p className="text-sm sm:text-base text-white/85 max-w-md">
+            Vetted local cleaning services recommended by your neighbors — not anonymous reviews.
           </p>
-          <ul className="flex flex-col sm:flex-row gap-3 sm:gap-6 text-sm text-foreground/70">
-            {[
-              "Neighbor-recommended cleaners",
-              "Deep cleaning &amp; recurring service",
-              "Move-in / move-out specialists",
-            ].map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <span className="w-4 h-4 rounded-full bg-accent/15 text-accent flex items-center justify-center shrink-0">
-                  <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-                </span>
-                <span dangerouslySetInnerHTML={{ __html: item }} />
-              </li>
-            ))}
-          </ul>
         </div>
+      </section>
+
+      <main className="flex-1 w-full max-w-4xl mx-auto px-5 md:px-8 py-10">
 
         {/* ── Murrieta section ── */}
         <CleanerSection
@@ -132,7 +124,7 @@ export function LandingPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Vouched Cleaners &bull; Temecula
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
           &amp; Murrieta, CA
         </p>
       </footer>

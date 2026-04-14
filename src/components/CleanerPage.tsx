@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Phone, MapPin, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,11 @@ import cleanersData from "@/data/cleaners.json";
 
 type Cleaner = typeof cleanersData[0];
 
-export function CleanerPage() {
+export function CleanerPage({ theme }: { theme: "a" | "b" }) {
+  const logo =
+    theme === "b"
+      ? "/logos/friend-tested-cleaners-black.png"
+      : "/logos/friend-tested-cleaners-dark-blue.png";
   const { slug } = useParams<{ slug: string }>();
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -31,7 +34,7 @@ export function CleanerPage() {
     const pageUrl = `https://friendtested.pro/cleaners/${slug}`;
 
     // Title + meta description
-    document.title = `${cleaner.name} | House Cleaning in ${cleaner.city}, CA | Vouched Cleaners`;
+    document.title = `${cleaner.name} | House Cleaning in ${cleaner.city}, CA | Friend Tested Cleaners`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute("content", cleaner.description.slice(0, 155) + "…");
 
@@ -101,7 +104,7 @@ export function CleanerPage() {
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
       <header className="w-full px-5 md:px-10 py-3.5 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
-        <Logo size="sm" />
+        <img src={logo} alt="Friend Tested Cleaners" className="h-14 w-auto" />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
           Temecula &amp; Murrieta, CA
@@ -226,7 +229,7 @@ export function CleanerPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Vouched Cleaners &bull; Temecula
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
           &amp; Murrieta, CA
         </p>
       </footer>

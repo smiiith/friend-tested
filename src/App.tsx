@@ -44,7 +44,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cleaners/:slug" element={<CleanerPage />} />
+          <Route path="/cleaners/:slug" element={<CleanerPage theme={theme} />} />
         </Routes>
       </BrowserRouter>
     </div>

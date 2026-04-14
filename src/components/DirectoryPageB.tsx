@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/Logo";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +20,7 @@ export function DirectoryPageB() {
   const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
 
   useEffect(() => {
-    document.title = "Vouched Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
+    document.title = "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
@@ -46,14 +45,14 @@ export function DirectoryPageB() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Hero banner ── */}
-      <header className="bg-primary text-primary-foreground py-12 px-5 text-center">
-        <div className="flex justify-center mb-5">
-          <Logo size="lg" />
+      <header className="bg-card border-b border-border py-12 px-5 text-center">
+        <div className="flex justify-center mb-6">
+          <img src="/logos/friend-tested-cleaners-black.png" alt="Friend Tested Cleaners" className="h-20 w-auto" />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 leading-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 leading-tight text-foreground">
           Trusted House Cleaners in<br className="hidden sm:block" /> Murrieta &amp; Temecula
         </h1>
-        <p className="text-primary-foreground/80 max-w-lg mx-auto text-base">
+        <p className="text-muted-foreground max-w-lg mx-auto text-base">
           Browse local maid services and cleaning companies serving Murrieta,
           Temecula, and the Temecula Valley — vetted and recommended by your neighbors.
         </p>
@@ -112,7 +111,7 @@ export function DirectoryPageB() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Vouched Cleaners &bull; Temecula
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
           &amp; Murrieta, CA
         </p>
       </footer>
