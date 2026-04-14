@@ -33,11 +33,63 @@ export function CleanerPage({ theme, onToggleTheme, isDev }: CleanerPageProps) {
 
   useEffect(() => {
     if (!cleaner) return;
+    const slug = cleaner.id;
+    const pageUrl = `https://friendtested.pro/cleaners/${slug}`;
+
+    // Title + meta description
     document.title = `${cleaner.name} | House Cleaning in ${cleaner.city}, CA | Vouched Cleaners`;
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute("content", cleaner.description.slice(0, 155) + "…");
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", cleaner.description.slice(0, 155) + "…");
+
+    // Canonical tag
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
     }
+    canonical.href = pageUrl;
+
+    // JSON-LD: LocalBusiness for this cleaner
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": pageUrl,
+      "name": cleaner.name,
+      "description": cleaner.description,
+      "telephone": cleaner.phone,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": cleaner.address,
+        "addressLocality": cleaner.city,
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
+      "areaServed": cleaner.serviceArea.map((area) => ({
+        "@type": "City",
+        "name": area
+      })),
+      "url": pageUrl,
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Cleaning Services",
+        "itemListElement": cleaner.services.map((s) => ({
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": s }
+        }))
+      }
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "cleaner-jsonld";
+    script.textContent = JSON.stringify(schema);
+    document.head.querySelector("#cleaner-jsonld")?.remove();
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.querySelector("#cleaner-jsonld")?.remove();
+      canonical?.remove();
+    };
   }, [cleaner]);
 
   if (!cleaner) return <Navigate to="/" replace />;
