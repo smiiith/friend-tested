@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { LandingPage } from "@/components/LandingPage"
+import { CleanerPage } from "@/components/CleanerPage"
 import { posthog } from "@/lib/posthog"
 
 type Theme = "a" | "b" | "c"
@@ -25,7 +27,6 @@ export default function App() {
   useEffect(() => {
     sessionStorage.setItem("vc_theme", theme)
     posthog.register({ ab_theme: theme })
-    // Update URL param without page reload (useful for sharing dev links)
     const url = new URL(window.location.href)
     url.searchParams.set("theme", theme)
     window.history.replaceState({}, "", url.toString())
@@ -37,11 +38,30 @@ export default function App() {
 
   return (
     <div data-theme={theme}>
-      <LandingPage
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        isDev={import.meta.env.DEV}
-      />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LandingPage
+                theme={theme}
+                onToggleTheme={toggleTheme}
+                isDev={import.meta.env.DEV}
+              />
+            }
+          />
+          <Route
+            path="/cleaners/:slug"
+            element={
+              <CleanerPage
+                theme={theme}
+                onToggleTheme={toggleTheme}
+                isDev={import.meta.env.DEV}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }
