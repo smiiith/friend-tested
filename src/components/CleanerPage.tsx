@@ -33,10 +33,16 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
     const slug = cleaner.id;
     const pageUrl = `https://friendtested.pro/cleaners/${slug}`;
 
+    // Truncate description at last complete sentence under 155 chars
+    const raw = cleaner.description;
+    let metaDescText = raw.slice(0, 155);
+    const lastPeriod = metaDescText.lastIndexOf(".");
+    if (lastPeriod > 80) metaDescText = metaDescText.slice(0, lastPeriod + 1);
+
     // Title + meta description
     document.title = `${cleaner.name} | House Cleaning in ${cleaner.city}, CA | Friend Tested Cleaners`;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute("content", cleaner.description.slice(0, 155) + "…");
+    if (metaDesc) metaDesc.setAttribute("content", metaDescText);
 
     // Canonical tag
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -47,34 +53,68 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
     }
     canonical.href = pageUrl;
 
-    // JSON-LD: LocalBusiness for this cleaner
+    // Open Graph tags
+    const ogTags: Record<string, string> = {
+      "og:title": `${cleaner.name} | House Cleaning in ${cleaner.city}, CA`,
+      "og:description": metaDescText,
+      "og:url": pageUrl,
+      "og:type": "website",
+      "twitter:title": `${cleaner.name} | House Cleaning in ${cleaner.city}, CA`,
+      "twitter:description": metaDescText,
+    };
+    const createdMeta: HTMLMetaElement[] = [];
+    for (const [property, content] of Object.entries(ogTags)) {
+      const attr = property.startsWith("twitter:") ? "name" : "property";
+      let tag = document.querySelector(`meta[${attr}="${property}"]`) as HTMLMetaElement | null;
+      if (!tag) {
+        tag = document.createElement("meta");
+        tag.setAttribute(attr, property);
+        document.head.appendChild(tag);
+        createdMeta.push(tag);
+      }
+      tag.setAttribute("content", content);
+    }
+
+    // JSON-LD: LocalBusiness + BreadcrumbList
     const schema = {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": pageUrl,
-      "name": cleaner.name,
-      "description": cleaner.description,
-      "telephone": cleaner.phone,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": cleaner.address,
-        "addressLocality": cleaner.city,
-        "addressRegion": "CA",
-        "addressCountry": "US"
-      },
-      "areaServed": cleaner.serviceArea.map((area) => ({
-        "@type": "City",
-        "name": area
-      })),
-      "url": pageUrl,
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Cleaning Services",
-        "itemListElement": cleaner.services.map((s) => ({
-          "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": s }
-        }))
-      }
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": pageUrl,
+          "name": cleaner.name,
+          "description": cleaner.description,
+          "telephone": cleaner.phone,
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": cleaner.address,
+            "addressLocality": cleaner.city,
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          },
+          "areaServed": cleaner.serviceArea.map((area) => ({
+            "@type": "City",
+            "name": area
+          })),
+          "url": pageUrl,
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Cleaning Services",
+            "itemListElement": cleaner.services.map((s) => ({
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": s }
+            }))
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://friendtested.pro/" },
+            { "@type": "ListItem", "position": 2, "name": `House Cleaners in ${cleaner.city}`, "item": "https://friendtested.pro/" },
+            { "@type": "ListItem", "position": 3, "name": cleaner.name, "item": pageUrl }
+          ]
+        }
+      ]
     };
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -86,6 +126,7 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
     return () => {
       document.head.querySelector("#cleaner-jsonld")?.remove();
       canonical?.remove();
+      createdMeta.forEach((tag) => tag.remove());
     };
   }, [cleaner]);
 

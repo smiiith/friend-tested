@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { posthog } from "@/lib/posthog";
 import cleanersData from "@/data/cleaners.json";
+import neighborhoodsData from "@/data/neighborhoods.json";
 
 type Cleaner = typeof cleanersData[0];
 type CityFilter = "all" | "Murrieta" | "Temecula";
@@ -91,6 +92,24 @@ export function DirectoryPageB() {
           ))}
         </div>
 
+        {/* ── Browse by neighborhood ── */}
+        <section className="mb-10">
+          <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
+            Browse by Neighborhood
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {neighborhoodsData.map((n) => (
+              <Link
+                key={n.id}
+                to={`/neighborhoods/${n.id}`}
+                className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
+              >
+                {n.name}, {n.city}
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── SEO body copy ── */}
         <section className="mt-12 pt-8 border-t border-border/50 text-muted-foreground">
           <h2 className="text-base font-semibold text-foreground mb-2">
@@ -99,7 +118,7 @@ export function DirectoryPageB() {
           <p className="text-sm leading-relaxed">
             Whether you need weekly housekeeping, a one-time deep clean, or a
             move-out cleaning in Murrieta or Temecula, the right cleaner makes
-            all the difference. Vouched Cleaners is a directory of local home
+            all the difference. Friend Tested Cleaners is a directory of local home
             cleaning services in the Temecula Valley — from established
             franchises like MaidPro and Molly Maid to trusted independent
             cleaners who know your neighborhood by name. Browse listings above
