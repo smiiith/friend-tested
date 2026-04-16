@@ -31,7 +31,7 @@ export default function App() {
     // 3. New user — let PostHog assign a variant and persist it
     posthog.onFeatureFlags(() => {
       const variant = posthog.getFeatureFlag("directory-theme")
-      const resolved: Theme = variant === "b" ? "b" : "a"
+      const resolved: Theme = variant === "test" ? "b" : "a"
       setTheme(resolved)
       localStorage.setItem("vc_theme", resolved)
       posthog.register({ ab_theme: resolved })
