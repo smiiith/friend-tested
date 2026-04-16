@@ -31,8 +31,19 @@ export function LandingPage() {
     }
   }, []);
 
-  function handleMoreToggle(id: string) {
-    setExpandedId((prev) => (prev === id ? null : id));
+  function handleMoreToggle(id: string, cleaner: Cleaner) {
+    setExpandedId((prev) => {
+      const opening = prev !== cleaner.id;
+      if (opening) {
+        posthog.capture("contact_clicked", {
+          cleaner_id: cleaner.id,
+          cleaner_name: cleaner.name,
+          cleaner_city: cleaner.city,
+          page: "directory",
+        });
+      }
+      return opening ? cleaner.id : null;
+    });
   }
 
   function handlePhoneClick(cleaner: Cleaner) {
@@ -45,6 +56,12 @@ export function LandingPage() {
   }
 
   function handleBookOnline(cleaner: Cleaner) {
+    posthog.capture("book_online_clicked", {
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
+      page: "directory",
+    });
     setBookingCleaner(cleaner);
   }
 
@@ -208,7 +225,7 @@ interface CleanerSectionProps {
   title: string;
   cleaners: Cleaner[];
   expandedId: string | null;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, cleaner: Cleaner) => void;
   onPhoneClick: (cleaner: Cleaner) => void;
   onBookOnline: (cleaner: Cleaner) => void;
 }
@@ -232,7 +249,7 @@ function CleanerSection({
             key={cleaner.id}
             cleaner={cleaner}
             expanded={expandedId === cleaner.id}
-            onToggle={() => onToggle(cleaner.id)}
+            onToggle={() => onToggle(cleaner.id, cleaner)}
             onPhoneClick={() => onPhoneClick(cleaner)}
             onBookOnline={() => onBookOnline(cleaner)}
           />
