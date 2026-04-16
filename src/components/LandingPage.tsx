@@ -31,7 +31,7 @@ export function LandingPage() {
     }
   }, []);
 
-  function handleMoreToggle(id: string, cleaner: Cleaner) {
+  function handleMoreToggle(_id: string, cleaner: Cleaner) {
     setExpandedId((prev) => {
       const opening = prev !== cleaner.id;
       if (opening) {
