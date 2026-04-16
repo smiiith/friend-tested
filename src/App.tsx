@@ -8,27 +8,31 @@ import { posthog } from "@/lib/posthog"
 
 type Theme = "a" | "b"
 
+function resolveStoredTheme(): Theme | null {
+  const param = new URLSearchParams(window.location.search).get("theme")
+  if (param === "a" || param === "b") return param
+  const stored = localStorage.getItem("vc_theme") as Theme | null
+  if (stored === "a" || stored === "b") return stored
+  return null
+}
+
 export default function App() {
-  const [theme, setTheme] = useState<Theme>("a")
+  const [theme, setTheme] = useState<Theme | null>(resolveStoredTheme)
 
   useEffect(() => {
-    // 1. URL param takes priority — useful for local testing (?theme=a or ?theme=b)
     const param = new URLSearchParams(window.location.search).get("theme")
     if (param === "a" || param === "b") {
-      setTheme(param)
       posthog.register({ ab_theme: param })
       return
     }
 
-    // 2. Returning user — use their previously assigned theme
     const stored = localStorage.getItem("vc_theme") as Theme | null
     if (stored === "a" || stored === "b") {
-      setTheme(stored)
       posthog.register({ ab_theme: stored })
       return
     }
 
-    // 3. New user — let PostHog assign a variant and persist it
+    // New user — let PostHog assign a variant and persist it
     posthog.onFeatureFlags(() => {
       const variant = posthog.getFeatureFlag("directory-theme")
       const resolved: Theme = variant === "test" ? "b" : "a"
@@ -37,6 +41,8 @@ export default function App() {
       posthog.register({ ab_theme: resolved })
     })
   }, [])
+
+  if (theme === null) return null
 
   const HomePage = theme === "b" ? DirectoryPageB : LandingPage
 
