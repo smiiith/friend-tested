@@ -21,12 +21,12 @@ export function LandingPage() {
 
   useEffect(() => {
     document.title =
-      "Friend Tested Cleaners | House Cleaners in Murrieta & Temecula, CA";
+      "Vetted Local Cleaners | House Cleaners in Murrieta & Temecula, CA";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
         "content",
-        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services recommended by your neighbors.",
+        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services.",
       );
     }
   }, []);
@@ -74,7 +74,7 @@ export function LandingPage() {
       <header className="w-full px-5 md:px-10 py-4 flex items-center justify-between border-b border-border/60 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
         <img
           src="/logos/friend-tested-cleaners-dark-blue.png"
-          alt="Friend Tested Cleaners"
+          alt="Vetted Local Cleaners"
           className="h-14 w-auto"
         />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
@@ -97,7 +97,7 @@ export function LandingPage() {
         <div className="relative h-full flex flex-col justify-center px-6 sm:px-10 md:px-14 max-w-2xl">
           <img
             src="/logos/friend-tested-cleaners-light-blue.png"
-            alt="Friend Tested Cleaners"
+            alt="Vetted Local Cleaners"
             className="h-12 w-auto self-start mb-3 drop-shadow"
           />
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight mb-3 drop-shadow">
@@ -167,7 +167,7 @@ export function LandingPage() {
             <p className="text-sm leading-relaxed">
               Whether you need weekly housekeeping, a one-time deep clean, or a
               move-out cleaning in Murrieta or Temecula, the right cleaner makes
-              all the difference. Friend Tested Cleaners is a community-curated
+              all the difference. Vetted Local Cleaners is a community-curated
               directory of independent local cleaning services in the Temecula
               Valley — not a paid listing service. Browse listings above to find
               a house cleaner near you, or click any name to learn more about
@@ -180,12 +180,12 @@ export function LandingPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-6 px-5 md:px-10">
         <p className="text-xs text-center text-muted-foreground mb-1">
-          Friend Tested Cleaners is a community-curated directory, not a paid
+          Vetted Local Cleaners is a community-curated directory, not a paid
           listing service. Every cleaner is independently operated and serves
           the Temecula Valley.
         </p>
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
+          &copy; {new Date().getFullYear()} Vetted Local Cleaners &bull;
           Temecula &amp; Murrieta, CA
         </p>
       </footer>

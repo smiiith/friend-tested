@@ -22,12 +22,12 @@ export function DirectoryPageB() {
 
   useEffect(() => {
     document.title =
-      "Friend Tested Cleaners | Trusted House Cleaners in Murrieta & Temecula, CA";
+      "Find a house cleaner near you | Vetted House Cleaners in Murrieta & Temecula, CA";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
         "content",
-        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse trusted cleaning services recommended by your neighbors.",
+        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse vetted cleaning services.",
       );
     }
   }, []);
@@ -53,7 +53,7 @@ export function DirectoryPageB() {
         <div className="flex justify-center mb-6">
           <img
             src="/logos/friend-tested-cleaners-black.png"
-            alt="Friend Tested Cleaners"
+            alt="Vetted Local Cleaners"
             className="h-20 w-auto"
           />
         </div>
@@ -125,9 +125,9 @@ export function DirectoryPageB() {
           <p className="text-sm leading-relaxed">
             Whether you need weekly housekeeping, a one-time deep clean, or a
             move-out cleaning in Murrieta or Temecula, the right cleaner makes
-            all the difference. Friend Tested Cleaners is a directory of local
+            all the difference. Local Vetted Cleaners is a directory of local
             home cleaning services in the Temecula Valley — from established
-            franchises like MaidPro and Molly Maid to trusted independent
+            franchises like MaidPro and Molly Maid to vetted independent
             cleaners who know your neighborhood by name. Browse listings above
             to find a house cleaner near you, or click any name to learn more.
           </p>
@@ -137,8 +137,8 @@ export function DirectoryPageB() {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
-          Temecula &amp; Murrieta, CA
+          &copy; {new Date().getFullYear()} Vetted Cleaners &bull; Temecula
+          &amp; Murrieta, CA
         </p>
       </footer>
 
