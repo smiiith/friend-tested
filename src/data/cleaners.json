@@ -98,5 +98,95 @@
     "serviceArea": ["Temecula", "Murrieta"],
     "description": "Martha's and Company Cleaning Services is a local, independently owned cleaning business serving the Temecula area. Martha and her team bring a warm, professional approach to every home they clean — the kind of personalized service that keeps clients coming back. Whether you need a thorough one-time clean or reliable recurring housekeeping, Martha's is the type of local cleaner that quickly becomes a trusted part of your household routine.",
     "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "doras-house-cleaning",
+    "name": "Dora's House Cleaning",
+    "phone": "(323) 594-9568",
+    "address": "Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee"],
+    "description": "Dora's House Cleaning is a family-owned, women-led cleaning service with over 25 years of experience serving the Menifee area. Founded on the belief that every home deserves the same care and attention regardless of size, Dora and her team bring a warm, personal touch that larger operations simply can't replicate. Their loyal client base — built almost entirely on word-of-mouth and glowing reviews — is a testament to the kind of consistency and trust that only comes from a crew that genuinely takes pride in their work.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
+  },
+  {
+    "id": "feels-better-cleaning-services",
+    "name": "Feels Better Cleaning Services",
+    "phone": "(951) 370-0650",
+    "address": "31780 Briggs Rd, Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee"],
+    "description": "Feels Better Cleaning Services is a licensed and state-registered LLC right here in Menifee, built around a simple promise: your home should feel better every time they leave. They offer flat-rate pricing based on home size and cleaning type, so there are no surprises at the end of the job — just a clean house and a clear receipt. Whether you need a one-time refresh or ongoing weekly or biweekly service, Feels Better brings a professional, no-nonsense approach that homeowners appreciate.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
+  },
+  {
+    "id": "rgd-cleaning-services",
+    "name": "RGD Cleaning Services",
+    "phone": "(951) 575-5051",
+    "address": "Menifee, CA 92585",
+    "city": "Menifee",
+    "serviceArea": ["Menifee", "Perris", "Temecula", "Wildomar", "Winchester", "Murrieta"],
+    "description": "RGD Cleaning Services has been operating out of Menifee since 2020 and has quickly built a strong reputation across Riverside County. With a BBB A+ rating and a presence on Yelp, Instagram, and TikTok, RGD is run with the kind of transparency and accountability that gives homeowners peace of mind. Founded by Ricardo D. Gonzalez, the business handles both residential and commercial jobs — from routine maintenance to post-construction cleanups — with a team that approaches every property with the same level of care.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning", "Post-Construction Cleaning"]
+  },
+  {
+    "id": "zenfresh-cleaning",
+    "name": "ZenFresh Cleaning",
+    "phone": "(951) 281-3105",
+    "address": "30141 Antelope Rd, Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee", "Murrieta", "Temecula"],
+    "description": "ZenFresh Cleaning is a licensed, insured, and bonded Menifee cleaning service that makes booking and pricing as easy as the clean itself. With flat-rate quotes, 100% online booking, and same-day availability, they cater to busy homeowners who don't have time to chase down estimates. They offer a full menu of services — from standard tidying to deep cleans, Airbnb turnovers, and eco-friendly green cleaning options — and back everything with a satisfaction guarantee.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Vacation Rental Cleaning"]
+  },
+  {
+    "id": "menifee-tidy-cleaners",
+    "name": "Menifee Tidy Cleaners",
+    "phone": "(951) 723-0466",
+    "address": "Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee"],
+    "description": "Menifee Tidy Cleaners has been serving local homes and businesses since 2013, making them one of the more established independent cleaning operations in the area. They offer extended hours seven days a week — including evenings — which makes them a practical choice for homeowners who need flexibility around work and family schedules. Price matching, same-day service, and a customer satisfaction guarantee round out an offering that's kept clients coming back for over a decade.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
+  },
+  {
+    "id": "honest-and-reliable-house-cleaning",
+    "name": "Honest and Reliable House Cleaning",
+    "phone": "(951) 821-8016",
+    "address": "Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee"],
+    "description": "Honest and Reliable House Cleaning does exactly what the name suggests — show up consistently, communicate clearly, and leave the home better than they found it. Popular on Nextdoor among Menifee residents, this independently operated cleaning service offers recurring weekly, biweekly, and monthly plans as well as one-time and move-in/move-out cleans. With basic cleanings starting at $99 and a straightforward no-surprises approach, they're a go-to for homeowners who've been burned by unreliable services in the past.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
+  },
+  {
+    "id": "999-cleaning",
+    "name": "999 Cleaning",
+    "phone": "(951) 570-0954",
+    "address": "24835 Sun Rose Cir, Menifee, CA 92584",
+    "city": "Menifee",
+    "serviceArea": ["Menifee"],
+    "description": "999 Cleaning is a locally registered Menifee LLC bringing a thorough, detail-forward approach to residential cleaning. In addition to standard house cleaning, they specialize in tile and grout restoration and window cleaning — services that larger general cleaners often overlook or subcontract out. Active on Yelp and available six days a week with extended evening hours, 999 Cleaning is a solid choice for homeowners looking for a locally rooted team that can handle the whole home, not just the basics.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Window Cleaning", "Post-Construction Cleaning"]
+  },
+  {
+    "id": "we-maid-it-socal",
+    "name": "We Maid It SoCal",
+    "phone": "(951) 453-1480",
+    "address": "Lake Elsinore, CA 92530",
+    "city": "Menifee",
+    "serviceArea": ["Menifee", "Lake Elsinore", "Murrieta", "Temecula", "Wildomar"],
+    "description": "We Maid It SoCal is a BBB-accredited cleaning company operating out of Lake Elsinore with a strong presence in Menifee and the surrounding communities. Founded in 2023, they've moved quickly to build a reputation for reliability — using non-toxic cleaning supplies, background-checking their staff, and backing every job with a 24-hour satisfaction guarantee. From standard residential cleans to move-out services, after-event cleanup, and commercial jobs, they cover a wide range of needs across Southwest Riverside County.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Office Cleaning"]
+  },
+  {
+    "id": "majestic-maids-cleaning",
+    "name": "Majestic Maids Cleaning",
+    "phone": "(951) 412-2322",
+    "address": "Murrieta, CA",
+    "city": "Menifee",
+    "serviceArea": ["Menifee", "Murrieta", "Temecula", "Lake Elsinore", "Wildomar"],
+    "description": "Majestic Maids Cleaning is a locally operated residential and vacation rental cleaning service with a coverage area that spans Menifee, Murrieta, Temecula, and beyond. They offer online booking through BookingKoala and cater to both homeowners and short-term rental hosts who need reliable, consistent turnovers between guests. With a professional setup, clear pricing, and a team that knows the neighborhoods they serve, Majestic Maids is a dependable option for anyone in Southwest Riverside County looking for quality cleaning without the franchise price tag.",
+    "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning", "Vacation Rental Cleaning"]
   }
 ]

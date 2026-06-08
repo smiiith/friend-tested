@@ -10,26 +10,67 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { posthog } from "@/lib/posthog";
+import { setPageSeo } from "@/lib/seo";
 import cleanersData from "@/data/cleaners.json";
 import neighborhoodsData from "@/data/neighborhoods.json";
+import areasData from "@/data/areas.json";
 
 type Cleaner = (typeof cleanersData)[0];
+type Area = (typeof areasData)[0];
 
-export function LandingPage() {
+export function LandingPage({ area }: { area: Area }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
 
+  const areaCleaners = cleanersData.filter((c) =>
+    (area.cities as string[]).includes(c.city),
+  );
+  const areaNeighborhoods = neighborhoodsData.filter((n) =>
+    (area.cities as string[]).includes(n.city),
+  );
+
   useEffect(() => {
-    document.title =
-      "Vetted Local Cleaners | House Cleaners in Murrieta & Temecula, CA";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute(
-        "content",
-        "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services.",
-      );
-    }
-  }, []);
+    setPageSeo({
+      title: area.seo.title,
+      description: area.seo.description,
+      canonical: area.canonical,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": area.canonical,
+            url: area.canonical,
+            name: `House Cleaners in ${area.displayName}, CA`,
+            description: area.seo.description,
+            isPartOf: { "@id": "https://friendtested.pro/#website" },
+          },
+          {
+            "@type": "ItemList",
+            name: `House Cleaners in ${area.displayName}, CA`,
+            description: area.seo.description,
+            url: area.canonical,
+            itemListElement: areaCleaners.map((cleaner, idx) => ({
+              "@type": "ListItem",
+              position: idx + 1,
+              item: {
+                "@type": "HomeAndConstructionBusiness",
+                "@id": `https://friendtested.pro/cleaners/${cleaner.id}`,
+                name: cleaner.name,
+                telephone: cleaner.phone,
+                address: cleaner.address,
+                url: `https://friendtested.pro/cleaners/${cleaner.id}`,
+                areaServed: cleaner.serviceArea.map((city) => ({
+                  "@type": "City",
+                  name: city,
+                })),
+              },
+            })),
+          },
+        ],
+      },
+    });
+  }, [area, areaCleaners]);
 
   function handleMoreToggle(_id: string, cleaner: Cleaner) {
     setExpandedId((prev) => {
@@ -40,6 +81,7 @@ export function LandingPage() {
           cleaner_name: cleaner.name,
           cleaner_city: cleaner.city,
           page: "directory",
+          area: area.id,
         });
       }
       return opening ? cleaner.id : null;
@@ -52,6 +94,7 @@ export function LandingPage() {
       cleaner_name: cleaner.name,
       cleaner_city: cleaner.city,
       page: "directory",
+      area: area.id,
     });
   }
 
@@ -61,12 +104,10 @@ export function LandingPage() {
       cleaner_name: cleaner.name,
       cleaner_city: cleaner.city,
       page: "directory",
+      area: area.id,
     });
     setBookingCleaner(cleaner);
   }
-
-  const murrieta = cleanersData.filter((c) => c.city === "Murrieta");
-  const temecula = cleanersData.filter((c) => c.city === "Temecula");
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -79,21 +120,19 @@ export function LandingPage() {
         />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
-          Temecula &amp; Murrieta, CA
+          {area.displayName}, CA
         </span>
       </header>
 
       {/* ── Hero ── */}
       <section className="relative w-full h-64 sm:h-80 overflow-hidden">
         <img
-          src="/hero/temecula-park-1-min.png"
-          alt="Temecula park and lake"
+          src={area.heroImage}
+          alt={area.heroAlt}
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
         />
-        {/* Gradient overlay for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-        {/* Text */}
         <div className="relative h-full flex flex-col justify-center px-6 sm:px-10 md:px-14 max-w-2xl">
           <img
             src="/logos/friend-tested-cleaners-light-blue.png"
@@ -104,75 +143,76 @@ export function LandingPage() {
             Find a House Cleaner Near You
           </h1>
           <p className="text-sm sm:text-base text-white/85 max-w-md mb-3">
-            Browse house cleaners, maid services, and cleaning companies in
-            Murrieta, Temecula, and the Temecula Valley.
+            Browse house cleaners, maid services, and cleaning companies in{" "}
+            {area.heroTagline}
           </p>
           <p className="text-xs text-white/60 font-medium tracking-wide uppercase">
-            10 cleaners &bull; Temecula Valley
+            {areaCleaners.length} cleaner{areaCleaners.length !== 1 ? "s" : ""}{" "}
+            &bull; {area.name}
           </p>
         </div>
       </section>
 
       <main className="flex-1 w-full">
-        {/* ── Murrieta section ── */}
-        <div className="max-w-4xl mx-auto px-5 md:px-8 pt-10">
-          <CleanerSection
-            title="House Cleaners in Murrieta, CA"
-            cleaners={murrieta}
-            expandedId={expandedId}
-            onToggle={handleMoreToggle}
-            onPhoneClick={handlePhoneClick}
-            onBookOnline={handleBookOnline}
-          />
-        </div>
+        {area.cities.map((city, idx) => {
+          const cleaners = cleanersData.filter((c) => c.city === city);
+          const tinted = idx % 2 === 1;
 
-        {/* ── Temecula section — tinted band ── */}
-        <div className="w-full bg-primary/5 border-y border-border/40 py-10">
-          <div className="max-w-4xl mx-auto px-5 md:px-8">
+          const section = (
             <CleanerSection
-              title="House Cleaners in Temecula, CA"
-              cleaners={temecula}
+              title={`House Cleaners in ${city}, CA`}
+              cleaners={cleaners}
               expandedId={expandedId}
               onToggle={handleMoreToggle}
               onPhoneClick={handlePhoneClick}
               onBookOnline={handleBookOnline}
             />
-          </div>
-        </div>
+          );
+
+          if (tinted) {
+            return (
+              <div
+                key={city}
+                className="w-full bg-primary/5 border-y border-border/40 py-10"
+              >
+                <div className="max-w-4xl mx-auto px-5 md:px-8">{section}</div>
+              </div>
+            );
+          }
+          return (
+            <div key={city} className="max-w-4xl mx-auto px-5 md:px-8 pt-10">
+              {section}
+            </div>
+          );
+        })}
 
         <div className="max-w-4xl mx-auto px-5 md:px-8 py-10">
           {/* ── Browse by neighborhood ── */}
-          <section className="mb-10">
-            <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
-              Browse by Neighborhood
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {neighborhoodsData.map((n) => (
-                <Link
-                  key={n.id}
-                  to={`/neighborhoods/${n.id}`}
-                  className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
-                >
-                  {n.name}, {n.city}
-                </Link>
-              ))}
-            </div>
-          </section>
+          {areaNeighborhoods.length > 0 && (
+            <section className="mb-10">
+              <h2 className="text-xl font-bold text-foreground mb-4 pb-2 border-b border-border/60">
+                Browse by Neighborhood
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {areaNeighborhoods.map((n) => (
+                  <Link
+                    key={n.id}
+                    to={`/neighborhoods/${n.id}`}
+                    className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
+                  >
+                    {n.name}, {n.city}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* ── SEO body copy ── */}
           <section className="mt-4 pt-8 border-t border-border/50 prose prose-sm max-w-none text-muted-foreground">
             <h2 className="text-base font-semibold text-foreground mb-2">
-              Finding a Reliable Maid Service in Murrieta &amp; Temecula
+              {area.seoSection.heading}
             </h2>
-            <p className="text-sm leading-relaxed">
-              Whether you need weekly housekeeping, a one-time deep clean, or a
-              move-out cleaning in Murrieta or Temecula, the right cleaner makes
-              all the difference. Vetted Local Cleaners is a community-curated
-              directory of independent local cleaning services in the Temecula
-              Valley — not a paid listing service. Browse listings above to find
-              a house cleaner near you, or click any name to learn more about
-              their services and coverage area.
-            </p>
+            <p className="text-sm leading-relaxed">{area.seoSection.body}</p>
           </section>
         </div>
       </main>
@@ -181,12 +221,12 @@ export function LandingPage() {
       <footer className="border-t border-border/60 py-6 px-5 md:px-10">
         <p className="text-xs text-center text-muted-foreground mb-1">
           Vetted Local Cleaners is a community-curated directory, not a paid
-          listing service. Every cleaner is independently operated and serves
-          the Temecula Valley.
+          listing service. Every cleaner is independently operated and serves{" "}
+          {area.name}.
         </p>
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Vetted Local Cleaners &bull;
-          Temecula &amp; Murrieta, CA
+          &copy; {new Date().getFullYear()} Vetted Local Cleaners &bull;{" "}
+          {area.displayName}, CA
         </p>
       </footer>
 

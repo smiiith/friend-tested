@@ -1,6 +1,6 @@
-# Friend Tested Cleaners
+# Vetted Local Cleaners (Friend Tested)
 
-A local house cleaner directory serving Murrieta and Temecula, CA — built for SEO and A/B testing.
+A multi-area local house cleaner directory — built for SEO, A/B testing, and easy expansion to new cities.
 
 **Live site:** https://friendtested.pro
 
@@ -8,9 +8,9 @@ A local house cleaner directory serving Murrieta and Temecula, CA — built for 
 
 ## What It Is
 
-Friend Tested Cleaners is a directory of vetted local house cleaning and maid services in the Temecula Valley. Users can browse cleaners by city or neighborhood, view contact details, and click to individual cleaner pages.
+Vetted Local Cleaners is a directory of vetted local house cleaning and maid services across Southwest Riverside County. Users can browse cleaners by area, city, or neighborhood, view contact details, and click through to individual cleaner pages.
 
-The site runs an A/B test (Theme A vs Theme B) driven by PostHog feature flags to determine which layout and visual design drives more phone click conversions.
+The site is data-driven: adding a new city requires only JSON updates — no code changes. It also runs an A/B test (Theme A vs Theme B) driven by PostHog feature flags to determine which layout drives more phone click conversions.
 
 ---
 
@@ -22,7 +22,7 @@ The site runs an A/B test (Theme A vs Theme B) driven by PostHog feature flags t
 - **UI Components:** Radix UI (Dialog)
 - **Analytics / A/B testing:** PostHog
 - **Deployment:** Vercel
-- **Data:** Static JSON files (`src/data/`)
+- **Data:** Static JSON files (`src/data/`) — intended to move to a database later
 
 ---
 
@@ -31,38 +31,44 @@ The site runs an A/B test (Theme A vs Theme B) driven by PostHog feature flags t
 ```
 src/
 ├── components/
-│   ├── LandingPage.tsx        # Theme A — directory home page
-│   ├── DirectoryPageB.tsx     # Theme B — alternate directory layout
+│   ├── LandingPage.tsx        # Theme A — area directory page (area-driven)
+│   ├── DirectoryPageB.tsx     # Theme B — alternate layout (area-driven)
 │   ├── CleanerPage.tsx        # Individual cleaner detail page (/cleaners/:slug)
 │   ├── NeighborhoodPage.tsx   # Neighborhood landing pages (/neighborhoods/:slug)
+│   └── NotFound.tsx           # 404 page (shown for unknown area slugs)
 │   └── ui/
 │       ├── button.tsx
 │       └── dialog.tsx
 ├── data/
-│   ├── cleaners.json          # All cleaner listings
+│   ├── areas.json             # Area definitions (slug, cities, hero, SEO copy)
+│   ├── cleaners.json          # All cleaner listings (city field maps to areas)
 │   └── neighborhoods.json     # Neighborhood pages data
 ├── lib/
 │   ├── posthog.ts             # PostHog initialization
+│   ├── seo.ts                 # Utility: sets title, meta, canonical, OG, JSON-LD
 │   └── utils.ts
-├── App.tsx                    # Routing + A/B theme assignment
+├── App.tsx                    # Routing + A/B theme assignment + AreaRoute
 └── index.css                  # Theme tokens (Theme A + Theme B CSS variables)
 
 public/
 ├── logos/                     # Brand logo variants (black, blue, dark-blue, light-blue)
-├── hero/                      # Hero images
-├── sitemap.xml                # All URLs including cleaner + neighborhood pages
+├── hero/                      # Hero images (per area)
+├── sitemap.xml                # All URLs including area, cleaner, and neighborhood pages
 └── robots.txt                 # Allows all; X-Robots-Tag noindex on Vercel previews
 ```
 
 ---
 
-## Pages
+## Pages & Routing
 
-| Route                  | Component                         | Description                    |
-| ---------------------- | --------------------------------- | ------------------------------ |
-| `/`                    | `LandingPage` or `DirectoryPageB` | Directory home (A/B tested)    |
-| `/cleaners/:slug`      | `CleanerPage`                     | Individual cleaner detail page |
-| `/neighborhoods/:slug` | `NeighborhoodPage`                | Neighborhood landing page      |
+| Route                  | Component                         | Description                              |
+| ---------------------- | --------------------------------- | ---------------------------------------- |
+| `/`                    | `LandingPage` or `DirectoryPageB` | Defaults to temecula-valley area         |
+| `/:areaSlug`           | `LandingPage` or `DirectoryPageB` | Any supported area (e.g. `/menifee`)     |
+| `/cleaners/:slug`      | `CleanerPage`                     | Individual cleaner detail page           |
+| `/neighborhoods/:slug` | `NeighborhoodPage`                | Neighborhood landing page                |
+
+Unknown area slugs (e.g. `/cucamonga`) render the `NotFound` 404 page. The `/temecula-valley` path is valid and shows the same content as `/`.
 
 ---
 
@@ -79,23 +85,23 @@ The A/B test is driven by a PostHog feature flag (`directory-theme`). Theme assi
 **Theme A (Trust Blue):**
 
 - White background, blue primary, green accent
-- Full-width hero image banner
-- Sticky nav with dark-blue logo
-- Two sections (Murrieta / Temecula) with list cards
-- "More" toggle reveals phone + Book Online
+- Full-width hero image banner (per-area)
+- Sticky nav with dark-blue logo and area location badge
+- One section per city in the area, alternating tinted bands
+- "Contact" toggle reveals phone + Book Online
 
 **Theme B (Warm Earth):**
 
 - Warm cream background, terracotta primary, gold accent
 - Centered header with black logo
-- City filter tabs (All / Murrieta / Temecula)
+- City filter tabs generated dynamically from the area's cities
 - 2-column card grid with contact always visible
 
 **Setting up the PostHog flag:**
 
 1. Go to PostHog → Feature Flags → New
 2. Key: `directory-theme`
-3. Type: Multiple variants — `a` (50%), `b` (50%)
+3. Type: Multiple variants — `control` (50%), `test` (50%)
 4. Roll out to 100% of users
 
 **Local testing:** Visit `/?theme=b` to force Theme B without needing PostHog configured.
@@ -104,6 +110,34 @@ The A/B test is driven by a PostHog feature flag (`directory-theme`). Theme assi
 
 ## Data
 
+### Adding a new area (`src/data/areas.json`)
+
+```json
+{
+  "id": "lake-elsinore",
+  "name": "Lake Elsinore",
+  "displayName": "Lake Elsinore",
+  "canonical": "https://friendtested.pro/lake-elsinore",
+  "cities": ["Lake Elsinore"],
+  "heroImage": "/hero/lake-elsinore-1.jpg",
+  "heroAlt": "Lake Elsinore, CA",
+  "heroTagline": "Lake Elsinore, CA.",
+  "seo": {
+    "title": "Vetted Local Cleaners | House Cleaners in Lake Elsinore, CA",
+    "description": "Find local house cleaners and maid services in Lake Elsinore, CA."
+  },
+  "seoSection": {
+    "heading": "Finding a Reliable Maid Service in Lake Elsinore",
+    "body": "..."
+  }
+}
+```
+
+- `id` becomes the URL slug (`/lake-elsinore`)
+- `cities` is a list of city strings — cleaners and neighborhoods are matched by this array
+- For multi-city areas (like temecula-valley), list all cities: `["Murrieta", "Temecula"]`
+- Add the area URL to `public/sitemap.xml`
+
 ### Adding a cleaner (`src/data/cleaners.json`)
 
 ```json
@@ -111,18 +145,17 @@ The A/B test is driven by a PostHog feature flag (`directory-theme`). Theme assi
   "id": "unique-slug",
   "name": "Business Name",
   "phone": "(951) 555-0000",
-  "address": "123 Main St, Murrieta, CA 92562",
-  "city": "Murrieta",
-  "serviceArea": ["Murrieta", "Temecula"],
+  "address": "123 Main St, Menifee, CA 92584",
+  "city": "Menifee",
+  "serviceArea": ["Menifee", "Murrieta"],
   "description": "2-3 sentence description with local flavor and keywords.",
   "services": ["Regular Cleaning", "Deep Cleaning", "Move-In/Move-Out Cleaning"]
 }
 ```
 
-After adding a cleaner:
-
+- `city` must match a string in one of the areas' `cities` arrays — this is how the cleaner gets assigned to an area page
 - Add their URL to `public/sitemap.xml`
-- Add them to the `ItemList` in `index.html` JSON-LD
+- JSON-LD for area pages is generated dynamically — no need to update `index.html`
 
 ### Adding a neighborhood (`src/data/neighborhoods.json`)
 
@@ -130,8 +163,8 @@ After adding a cleaner:
 {
   "id": "neighborhood-slug",
   "name": "Neighborhood Name",
-  "city": "Temecula",
-  "matchCity": "Temecula",
+  "city": "Menifee",
+  "matchCity": "Menifee",
   "tagline": "One-line description",
   "paragraphs": [
     "Paragraph 1 — local history/character.",
@@ -141,11 +174,7 @@ After adding a cleaner:
 }
 ```
 
-Cleaners are matched to neighborhoods using `matchCity` — any cleaner whose `serviceArea` includes `matchCity` will appear on that neighborhood page.
-
-After adding a neighborhood:
-
-- Add its URL to `public/sitemap.xml`
+Cleaners are matched to neighborhoods using `matchCity` — any cleaner whose `serviceArea` includes `matchCity` will appear on that neighborhood page. After adding a neighborhood, add its URL to `public/sitemap.xml`.
 
 ---
 
@@ -153,24 +182,28 @@ After adding a neighborhood:
 
 ### Technical
 
-- Unique `<title>` and `<meta description>` on every page (set via `useEffect`)
-- `<link rel="canonical">` injected per page
-- Open Graph + Twitter Card tags on all pages
-- JSON-LD structured data:
-  - Homepage: `WebSite` + `LocalBusiness` + `ItemList` (directory)
+- Unique `<title>`, `<meta description>`, canonical, and Open Graph tags on every page (managed via `src/lib/seo.ts`)
+- JSON-LD structured data injected dynamically per page:
+  - Area pages: `WebPage` + `ItemList` of `HomeAndConstructionBusiness` entries
   - Cleaner pages: `LocalBusiness` + `BreadcrumbList`
   - Neighborhood pages: `BreadcrumbList` + `ItemList`
-- Sitemap covers all 16 pages (1 home + 10 cleaners + 5 neighborhoods)
+- Static fallback `WebSite` + `LocalBusiness` schema in `index.html` for non-JS crawlers
+- Sitemap covers all area, cleaner, and neighborhood pages
 - `X-Robots-Tag: noindex, nofollow` on all `*.vercel.app` preview deployments (via `vercel.json`)
+
+### Current areas
+
+| Area slug         | Cities                   | URL                                    |
+| ----------------- | ------------------------ | -------------------------------------- |
+| `temecula-valley` | Murrieta, Temecula       | `/` and `/temecula-valley`             |
+| `menifee`         | Menifee                  | `/menifee`                             |
 
 ### Keywords targeted
 
-- City-level: "house cleaner Murrieta", "maid service Temecula CA"
+- Area-level: "house cleaner Menifee CA", "maid service Murrieta", "house cleaners Temecula Valley"
 - Neighborhood-level: "house cleaners Redhawk", "cleaning service California Oaks Murrieta"
-- Service-level: "deep cleaning Temecula", "move-out cleaning Murrieta"
+- Service-level: "deep cleaning Temecula", "move-out cleaning Menifee"
 - Trust-framing: "vetted house cleaners", "neighbor-recommended cleaning"
-
-See [GitHub issue #8](https://github.com/smiiith/friend-tested/issues/8) for the full 50-keyword analysis with intent and buying stage breakdown.
 
 ---
 
@@ -181,7 +214,10 @@ See [GitHub issue #8](https://github.com/smiiith/friend-tested/issues/8) for the
 - `phone_number_clicked` — fired on every phone number click, with properties:
   - `cleaner_id`, `cleaner_name`, `cleaner_city`
   - `page` — `"directory"`, `"cleaner_detail"`, or `"neighborhood"`
+  - `area` — area slug (directory pages only)
   - `neighborhood` — (neighborhood pages only)
+- `contact_clicked` — fired when the Contact toggle is expanded (Theme A only)
+- `book_online_clicked` — fired when Book Online is clicked
 - `ab_theme` — super property registered on every event, value is `"a"` or `"b"`
 
 ---

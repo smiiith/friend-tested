@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { posthog } from "@/lib/posthog";
 import cleanersData from "@/data/cleaners.json";
+import areasData from "@/data/areas.json";
 
 type Cleaner = typeof cleanersData[0];
 
@@ -23,6 +24,12 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
   const [bookingOpen, setBookingOpen] = useState(false);
 
   const cleaner = cleanersData.find((c) => c.id === slug) as Cleaner | undefined;
+
+  const area = cleaner
+    ? areasData.find((a) => (a.cities as string[]).includes(cleaner.city))
+    : undefined;
+  const areaPath = area?.id === "temecula-valley" ? "/" : `/${area?.id ?? ""}`;
+  const areaLabel = area ? `All house cleaners in ${area.displayName}` : "All house cleaners";
 
   const relatedCleaners = cleaner
     ? cleanersData.filter((c) => c.city === cleaner.city && c.id !== cleaner.id).slice(0, 3)
@@ -148,18 +155,18 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
         <img src={logo} alt="Friend Tested Cleaners" className="h-14 w-auto" />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
-          Temecula &amp; Murrieta, CA
+          {area?.displayName ?? cleaner?.city}, CA
         </span>
       </header>
 
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 md:px-8 py-10">
         {/* ── Back link ── */}
         <Link
-          to="/"
+          to={areaPath}
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-          All house cleaners in Murrieta &amp; Temecula
+          {areaLabel}
         </Link>
 
         {/* ── Cleaner header ── */}
@@ -226,7 +233,7 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
           <h2 className="text-base font-semibold text-foreground mb-1">Service Area</h2>
           <p className="text-sm text-muted-foreground">
             {cleaner.name} serves homeowners in{" "}
-            {cleaner.serviceArea.join(", ")} and surrounding Temecula Valley communities.
+            {cleaner.serviceArea.join(", ")} and surrounding {area?.name ?? cleaner.city} communities.
           </p>
         </div>
 
@@ -257,10 +264,10 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
             </div>
             <div className="mt-4">
               <Link
-                to="/"
+                to={areaPath}
                 className="text-sm text-primary hover:underline"
               >
-                View all house cleaners in Murrieta &amp; Temecula →
+                {areaLabel} →
               </Link>
             </div>
           </div>
@@ -270,8 +277,8 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
-          &amp; Murrieta, CA
+          &copy; {new Date().getFullYear()} Vetted Local Cleaners &bull;{" "}
+          {area?.displayName ?? cleaner.city}, CA
         </p>
       </footer>
 
