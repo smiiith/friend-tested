@@ -1,0 +1,38 @@
+[
+  {
+    "id": "temecula-valley",
+    "name": "Temecula Valley",
+    "displayName": "Temecula & Murrieta",
+    "canonical": "https://friendtested.pro/",
+    "cities": ["Murrieta", "Temecula"],
+    "heroImage": "/hero/temecula-park-1-min.png",
+    "heroAlt": "Temecula park and lake",
+    "heroTagline": "Murrieta, Temecula, and the Temecula Valley.",
+    "seo": {
+      "title": "Vetted Local Cleaners | House Cleaners in Murrieta & Temecula, CA",
+      "description": "Find local house cleaners and maid services in Murrieta and Temecula, CA. Browse cleaning services recommended by your neighbors."
+    },
+    "seoSection": {
+      "heading": "Finding a Reliable Maid Service in Murrieta & Temecula",
+      "body": "Whether you need weekly housekeeping, a one-time deep clean, or a move-out cleaning in Murrieta or Temecula, the right cleaner makes all the difference. Vetted Local Cleaners is a community-curated directory of independent local cleaning services in the Temecula Valley — not a paid listing service. Browse listings above to find a house cleaner near you, or click any name to learn more about their services and coverage area."
+    }
+  },
+  {
+    "id": "menifee",
+    "name": "Menifee",
+    "displayName": "Menifee",
+    "canonical": "https://friendtested.pro/menifee",
+    "cities": ["Menifee"],
+    "heroImage": "/hero/menifee-ca-22.jpg",
+    "heroAlt": "Menifee Lakes community entrance with waterfall",
+    "heroTagline": "Menifee, CA.",
+    "seo": {
+      "title": "Vetted Local Cleaners | House Cleaners in Menifee, CA",
+      "description": "Find local house cleaners and maid services in Menifee, CA. Browse cleaning services recommended by your neighbors."
+    },
+    "seoSection": {
+      "heading": "Finding a Reliable Maid Service in Menifee",
+      "body": "Whether you need weekly housekeeping, a one-time deep clean, or a move-out cleaning in Menifee, the right cleaner makes all the difference. Vetted Local Cleaners is a community-curated directory of independent local cleaning services in Menifee — not a paid listing service. Browse listings above to find a house cleaner near you, or click any name to learn more about their services and coverage area."
+    }
+  }
+]
