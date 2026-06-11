@@ -128,6 +128,17 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
     });
   }
 
+  function handleBookOnline(cleaner: Cleaner) {
+    posthog.capture("book_online_clicked", {
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
+      page: "neighborhood",
+      neighborhood: neighborhood!.id,
+    });
+    setBookingCleaner(cleaner);
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
@@ -202,7 +213,7 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
                       <Phone className="w-4 h-4 shrink-0" />
                       {cleaner.phone}
                     </a>
-                    <Button size="sm" onClick={() => setBookingCleaner(cleaner)}>
+                    <Button size="sm" onClick={() => handleBookOnline(cleaner)}>
                       Book Online
                     </Button>
                   </div>

@@ -10,4 +10,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/ingest/static": {
+        target: "https://us-assets.i.posthog.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ingest/, ""),
+      },
+      "/ingest": {
+        target: "https://us.i.posthog.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ingest/, ""),
+      },
+    },
+  },
 })

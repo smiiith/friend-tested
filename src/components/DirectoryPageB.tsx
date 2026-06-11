@@ -91,6 +91,25 @@ export function DirectoryPageB({ area }: { area: Area }) {
     });
   }
 
+  function handleBookOnline(cleaner: Cleaner) {
+    posthog.capture("book_online_clicked", {
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
+      page: "directory",
+      area: area.id,
+    });
+    setBookingCleaner(cleaner);
+  }
+
+  function handleCityFilter(city: string) {
+    posthog.capture("city_filter_clicked", {
+      city,
+      area: area.id,
+    });
+    setFilter(city);
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Hero banner ── */}
@@ -117,7 +136,7 @@ export function DirectoryPageB({ area }: { area: Area }) {
           {(["all", ...area.cities] as string[]).map((city) => (
             <button
               key={city}
-              onClick={() => setFilter(city)}
+              onClick={() => handleCityFilter(city)}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                 filter === city
                   ? "bg-primary text-primary-foreground shadow-sm"
@@ -139,7 +158,7 @@ export function DirectoryPageB({ area }: { area: Area }) {
               key={cleaner.id}
               cleaner={cleaner}
               onPhoneClick={() => handlePhoneClick(cleaner)}
-              onBookOnline={() => setBookingCleaner(cleaner)}
+              onBookOnline={() => handleBookOnline(cleaner)}
             />
           ))}
         </div>

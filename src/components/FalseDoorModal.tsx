@@ -90,7 +90,10 @@ export function FalseDoorModal({ open, onOpenChange }: FalseDoorModalProps) {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => handleOpenChange(false)}
+              onClick={() => {
+                posthog.capture("waitlist_success_dismissed");
+                handleOpenChange(false);
+              }}
             >
               Close
             </Button>

@@ -148,6 +148,16 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
     });
   }
 
+  function handleBookOnline() {
+    posthog.capture("book_online_clicked", {
+      cleaner_id: cleaner!.id,
+      cleaner_name: cleaner!.name,
+      cleaner_city: cleaner!.city,
+      page: "cleaner_detail",
+    });
+    setBookingOpen(true);
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* ── Nav ── */}
@@ -196,7 +206,7 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
           </a>
           <Button
             size="lg"
-            onClick={() => setBookingOpen(true)}
+            onClick={handleBookOnline}
             className="sm:ml-auto"
           >
             Book Online
