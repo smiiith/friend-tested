@@ -13,6 +13,17 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      // temecula-valley was accessible via /:areaSlug in the Vite SPA.
+      // The canonical URL is / — redirect the old path permanently.
+      {
+        source: "/temecula-valley",
+        destination: "/",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig
