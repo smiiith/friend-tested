@@ -1,80 +1,38 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ChevronDown, ChevronUp, Phone, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { ChevronDown, ChevronUp, Phone, MapPin } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { posthog } from "@/lib/posthog";
-import { setPageSeo } from "@/lib/seo";
-import cleanersData from "@/data/cleaners.json";
-import neighborhoodsData from "@/data/neighborhoods.json";
-import areasData from "@/data/areas.json";
+} from "@/components/ui/dialog"
+import { posthog } from "@/lib/posthog"
+import cleanersData from "@/data/cleaners.json"
+import neighborhoodsData from "@/data/neighborhoods.json"
+import areasData from "@/data/areas.json"
 
-type Cleaner = (typeof cleanersData)[0];
-type Area = (typeof areasData)[0];
+type Cleaner = (typeof cleanersData)[0]
+type Area = (typeof areasData)[0]
 
 export function LandingPage({ area }: { area: Area }) {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null)
 
   const areaCleaners = cleanersData.filter((c) =>
     (area.cities as string[]).includes(c.city),
-  );
+  )
   const areaNeighborhoods = neighborhoodsData.filter((n) =>
     (area.cities as string[]).includes(n.city),
-  );
-
-  useEffect(() => {
-    setPageSeo({
-      title: area.seo.title,
-      description: area.seo.description,
-      canonical: area.canonical,
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "WebPage",
-            "@id": area.canonical,
-            url: area.canonical,
-            name: `House Cleaners in ${area.displayName}, CA`,
-            description: area.seo.description,
-            isPartOf: { "@id": "https://friendtested.pro/#website" },
-          },
-          {
-            "@type": "ItemList",
-            name: `House Cleaners in ${area.displayName}, CA`,
-            description: area.seo.description,
-            url: area.canonical,
-            itemListElement: areaCleaners.map((cleaner, idx) => ({
-              "@type": "ListItem",
-              position: idx + 1,
-              item: {
-                "@type": "HomeAndConstructionBusiness",
-                "@id": `https://friendtested.pro/cleaners/${cleaner.id}`,
-                name: cleaner.name,
-                telephone: cleaner.phone,
-                address: cleaner.address,
-                url: `https://friendtested.pro/cleaners/${cleaner.id}`,
-                areaServed: cleaner.serviceArea.map((city) => ({
-                  "@type": "City",
-                  name: city,
-                })),
-              },
-            })),
-          },
-        ],
-      },
-    });
-  }, [area, areaCleaners]);
+  )
 
   function handleMoreToggle(_id: string, cleaner: Cleaner) {
     setExpandedId((prev) => {
-      const opening = prev !== cleaner.id;
+      const opening = prev !== cleaner.id
       if (opening) {
         posthog.capture("contact_clicked", {
           cleaner_id: cleaner.id,
@@ -82,10 +40,10 @@ export function LandingPage({ area }: { area: Area }) {
           cleaner_city: cleaner.city,
           page: "directory",
           area: area.id,
-        });
+        })
       }
-      return opening ? cleaner.id : null;
-    });
+      return opening ? cleaner.id : null
+    })
   }
 
   function handlePhoneClick(cleaner: Cleaner) {
@@ -95,7 +53,7 @@ export function LandingPage({ area }: { area: Area }) {
       cleaner_city: cleaner.city,
       page: "directory",
       area: area.id,
-    });
+    })
   }
 
   function handleBookOnline(cleaner: Cleaner) {
@@ -105,8 +63,8 @@ export function LandingPage({ area }: { area: Area }) {
       cleaner_city: cleaner.city,
       page: "directory",
       area: area.id,
-    });
-    setBookingCleaner(cleaner);
+    })
+    setBookingCleaner(cleaner)
   }
 
   return (
@@ -155,8 +113,8 @@ export function LandingPage({ area }: { area: Area }) {
 
       <main className="flex-1 w-full">
         {area.cities.map((city, idx) => {
-          const cleaners = cleanersData.filter((c) => c.city === city);
-          const tinted = idx % 2 === 1;
+          const cleaners = cleanersData.filter((c) => c.city === city)
+          const tinted = idx % 2 === 1
 
           const section = (
             <CleanerSection
@@ -167,7 +125,7 @@ export function LandingPage({ area }: { area: Area }) {
               onPhoneClick={handlePhoneClick}
               onBookOnline={handleBookOnline}
             />
-          );
+          )
 
           if (tinted) {
             return (
@@ -177,13 +135,13 @@ export function LandingPage({ area }: { area: Area }) {
               >
                 <div className="max-w-4xl mx-auto px-5 md:px-8">{section}</div>
               </div>
-            );
+            )
           }
           return (
             <div key={city} className="max-w-4xl mx-auto px-5 md:px-8 pt-10">
               {section}
             </div>
-          );
+          )
         })}
 
         <div className="max-w-4xl mx-auto px-5 md:px-8 py-10">
@@ -197,7 +155,7 @@ export function LandingPage({ area }: { area: Area }) {
                 {areaNeighborhoods.map((n) => (
                   <Link
                     key={n.id}
-                    to={`/neighborhoods/${n.id}`}
+                    href={`/neighborhoods/${n.id}`}
                     className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
                   >
                     {n.name}, {n.city}
@@ -234,15 +192,15 @@ export function LandingPage({ area }: { area: Area }) {
       <Dialog
         open={bookingCleaner !== null}
         onOpenChange={(open) => {
-          if (!open) setBookingCleaner(null);
+          if (!open) setBookingCleaner(null)
         }}
       >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Online Booking Unavailable</DialogTitle>
             <DialogDescription>
-              {bookingCleaner?.name} doesn't support online booking yet. Please
-              call them directly to schedule:
+              {bookingCleaner?.name} doesn&apos;t support online booking yet.
+              Please call them directly to schedule:
             </DialogDescription>
           </DialogHeader>
           {bookingCleaner && (
@@ -258,16 +216,16 @@ export function LandingPage({ area }: { area: Area }) {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
 
 interface CleanerSectionProps {
-  title: string;
-  cleaners: Cleaner[];
-  expandedId: string | null;
-  onToggle: (id: string, cleaner: Cleaner) => void;
-  onPhoneClick: (cleaner: Cleaner) => void;
-  onBookOnline: (cleaner: Cleaner) => void;
+  title: string
+  cleaners: Cleaner[]
+  expandedId: string | null
+  onToggle: (id: string, cleaner: Cleaner) => void
+  onPhoneClick: (cleaner: Cleaner) => void
+  onBookOnline: (cleaner: Cleaner) => void
 }
 
 function CleanerSection({
@@ -296,15 +254,15 @@ function CleanerSection({
         ))}
       </div>
     </section>
-  );
+  )
 }
 
 interface CleanerCardProps {
-  cleaner: Cleaner;
-  expanded: boolean;
-  onToggle: () => void;
-  onPhoneClick: () => void;
-  onBookOnline: () => void;
+  cleaner: Cleaner
+  expanded: boolean
+  onToggle: () => void
+  onPhoneClick: () => void
+  onBookOnline: () => void
 }
 
 function CleanerCard({
@@ -323,7 +281,7 @@ function CleanerCard({
       <div className="flex items-start justify-between px-4 pt-4 pb-3 gap-3">
         <div className="flex-1 min-w-0">
           <Link
-            to={`/cleaners/${cleaner.id}`}
+            href={`/cleaners/${cleaner.id}`}
             className="font-semibold text-foreground hover:text-primary hover:underline block mb-1.5"
           >
             {cleaner.name}
@@ -380,5 +338,5 @@ function CleanerCard({
         </div>
       )}
     </div>
-  );
+  )
 }

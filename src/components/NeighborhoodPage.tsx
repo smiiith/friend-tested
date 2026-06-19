@@ -1,122 +1,43 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
-import { Phone, MapPin, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { Phone, MapPin, ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { posthog } from "@/lib/posthog";
-import neighborhoodsData from "@/data/neighborhoods.json";
-import cleanersData from "@/data/cleaners.json";
+} from "@/components/ui/dialog"
+import { posthog } from "@/lib/posthog"
+import { useTheme } from "@/components/ThemeProvider"
+import neighborhoodsData from "@/data/neighborhoods.json"
+import cleanersData from "@/data/cleaners.json"
 
-type Neighborhood = typeof neighborhoodsData[0];
-type Cleaner = typeof cleanersData[0];
+type Neighborhood = (typeof neighborhoodsData)[0]
+type Cleaner = (typeof cleanersData)[0]
 
-export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
-  const { slug } = useParams<{ slug: string }>();
-  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
-
-  const neighborhood = neighborhoodsData.find((n) => n.id === slug) as Neighborhood | undefined;
+export function NeighborhoodPage({
+  neighborhood,
+}: {
+  neighborhood: Neighborhood
+}) {
+  const theme = useTheme()
+  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null)
 
   const logo =
     theme === "b"
       ? "/logos/friend-tested-cleaners-black.png"
-      : "/logos/friend-tested-cleaners-dark-blue.png";
+      : "/logos/friend-tested-cleaners-dark-blue.png"
 
-  const cleaners = neighborhood
-    ? cleanersData.filter((c) => c.serviceArea.includes(neighborhood.matchCity))
-    : [];
-
-  const otherNeighborhoods = neighborhood
-    ? neighborhoodsData.filter((n) => n.id !== neighborhood.id)
-    : [];
-
-  useEffect(() => {
-    if (!neighborhood) return;
-    const pageUrl = `https://friendtested.pro/neighborhoods/${neighborhood.id}`;
-    const metaTitle = `House Cleaners in ${neighborhood.name}, ${neighborhood.city} CA | Friend Tested Cleaners`;
-    const metaDesc = `Find trusted house cleaners and maid services in ${neighborhood.name}, ${neighborhood.city}, CA. Browse local cleaning services serving ${neighborhood.name} and surrounding ${neighborhood.city} communities.`;
-
-    document.title = metaTitle;
-
-    const metaDescTag = document.querySelector('meta[name="description"]');
-    if (metaDescTag) metaDescTag.setAttribute("content", metaDesc);
-
-    // Canonical
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
-    }
-    canonical.href = pageUrl;
-
-    // OG + Twitter tags
-    const ogTags: Record<string, string> = {
-      "og:title": metaTitle,
-      "og:description": metaDesc,
-      "og:url": pageUrl,
-      "og:type": "website",
-      "twitter:title": metaTitle,
-      "twitter:description": metaDesc,
-    };
-    const createdMeta: HTMLMetaElement[] = [];
-    for (const [property, content] of Object.entries(ogTags)) {
-      const attr = property.startsWith("twitter:") ? "name" : "property";
-      let tag = document.querySelector(`meta[${attr}="${property}"]`) as HTMLMetaElement | null;
-      if (!tag) {
-        tag = document.createElement("meta");
-        tag.setAttribute(attr, property);
-        document.head.appendChild(tag);
-        createdMeta.push(tag);
-      }
-      tag.setAttribute("content", content);
-    }
-
-    // JSON-LD: BreadcrumbList + ItemList of cleaners
-    const schema = {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://friendtested.pro/" },
-            { "@type": "ListItem", "position": 2, "name": `House Cleaners in ${neighborhood.city}`, "item": "https://friendtested.pro/" },
-            { "@type": "ListItem", "position": 3, "name": `${neighborhood.name}, ${neighborhood.city}`, "item": pageUrl }
-          ]
-        },
-        {
-          "@type": "ItemList",
-          "name": `House Cleaners serving ${neighborhood.name}, ${neighborhood.city} CA`,
-          "url": pageUrl,
-          "itemListElement": cleaners.map((c, i) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "name": c.name,
-            "url": `https://friendtested.pro/cleaners/${c.id}`
-          }))
-        }
-      ]
-    };
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "neighborhood-jsonld";
-    script.textContent = JSON.stringify(schema);
-    document.head.querySelector("#neighborhood-jsonld")?.remove();
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.querySelector("#neighborhood-jsonld")?.remove();
-      canonical?.remove();
-      createdMeta.forEach((tag) => tag.remove());
-    };
-  }, [neighborhood, cleaners]);
-
-  if (!neighborhood) return <Navigate to="/" replace />;
+  const cleaners = cleanersData.filter((c) =>
+    c.serviceArea.includes(neighborhood.matchCity),
+  )
+  const otherNeighborhoods = neighborhoodsData.filter(
+    (n) => n.id !== neighborhood.id,
+  )
 
   function handlePhoneClick(cleaner: Cleaner) {
     posthog.capture("phone_number_clicked", {
@@ -124,8 +45,8 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
       cleaner_name: cleaner.name,
       cleaner_city: cleaner.city,
       page: "neighborhood",
-      neighborhood: neighborhood!.id,
-    });
+      neighborhood: neighborhood.id,
+    })
   }
 
   function handleBookOnline(cleaner: Cleaner) {
@@ -134,9 +55,9 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
       cleaner_name: cleaner.name,
       cleaner_city: cleaner.city,
       page: "neighborhood",
-      neighborhood: neighborhood!.id,
-    });
-    setBookingCleaner(cleaner);
+      neighborhood: neighborhood.id,
+    })
+    setBookingCleaner(cleaner)
   }
 
   return (
@@ -153,7 +74,7 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 md:px-8 py-10">
         {/* ── Back link ── */}
         <Link
-          to="/"
+          href="/"
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -195,7 +116,7 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <div className="flex-1 min-w-0">
                     <Link
-                      to={`/cleaners/${cleaner.id}`}
+                      href={`/cleaners/${cleaner.id}`}
                       className="font-semibold text-foreground hover:text-primary hover:underline"
                     >
                       {cleaner.name}
@@ -232,7 +153,7 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
             {otherNeighborhoods.map((n) => (
               <Link
                 key={n.id}
-                to={`/neighborhoods/${n.id}`}
+                href={`/neighborhoods/${n.id}`}
                 className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
               >
                 {n.name}, {n.city}
@@ -243,7 +164,7 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
 
         {/* ── Back to directory ── */}
         <div>
-          <Link to="/" className="text-sm text-primary hover:underline">
+          <Link href="/" className="text-sm text-primary hover:underline">
             View all house cleaners in Murrieta &amp; Temecula →
           </Link>
         </div>
@@ -252,22 +173,24 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
       {/* ── Footer ── */}
       <footer className="border-t border-border/60 py-4 px-5 md:px-10 mt-10">
         <p className="text-xs text-center text-muted-foreground">
-          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull; Temecula
-          &amp; Murrieta, CA
+          &copy; {new Date().getFullYear()} Friend Tested Cleaners &bull;
+          Temecula &amp; Murrieta, CA
         </p>
       </footer>
 
       {/* ── Book Online Dialog ── */}
       <Dialog
         open={bookingCleaner !== null}
-        onOpenChange={(open) => { if (!open) setBookingCleaner(null); }}
+        onOpenChange={(open) => {
+          if (!open) setBookingCleaner(null)
+        }}
       >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Online Booking Unavailable</DialogTitle>
             <DialogDescription>
-              {bookingCleaner?.name} doesn't support online booking yet. Please
-              call them directly to schedule:
+              {bookingCleaner?.name} doesn&apos;t support online booking yet.
+              Please call them directly to schedule:
             </DialogDescription>
           </DialogHeader>
           {bookingCleaner && (
@@ -283,5 +206,5 @@ export function NeighborhoodPage({ theme }: { theme: "a" | "b" }) {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

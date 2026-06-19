@@ -1,161 +1,61 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
-import { Phone, MapPin, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { Phone, MapPin, ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { posthog } from "@/lib/posthog";
-import cleanersData from "@/data/cleaners.json";
-import areasData from "@/data/areas.json";
+} from "@/components/ui/dialog"
+import { posthog } from "@/lib/posthog"
+import { useTheme } from "@/components/ThemeProvider"
+import cleanersData from "@/data/cleaners.json"
+import areasData from "@/data/areas.json"
 
-type Cleaner = typeof cleanersData[0];
+type Cleaner = (typeof cleanersData)[0]
 
-export function CleanerPage({ theme }: { theme: "a" | "b" }) {
+export function CleanerPage({ cleaner }: { cleaner: Cleaner }) {
+  const theme = useTheme()
+  const [bookingOpen, setBookingOpen] = useState(false)
+
   const logo =
     theme === "b"
       ? "/logos/friend-tested-cleaners-black.png"
-      : "/logos/friend-tested-cleaners-dark-blue.png";
-  const { slug } = useParams<{ slug: string }>();
-  const [bookingOpen, setBookingOpen] = useState(false);
+      : "/logos/friend-tested-cleaners-dark-blue.png"
 
-  const cleaner = cleanersData.find((c) => c.id === slug) as Cleaner | undefined;
+  const area = areasData.find((a) =>
+    (a.cities as string[]).includes(cleaner.city),
+  )
+  const areaPath = area?.id === "temecula-valley" ? "/" : `/${area?.id ?? ""}`
+  const areaLabel = area
+    ? `All house cleaners in ${area.displayName}`
+    : "All house cleaners"
 
-  const area = cleaner
-    ? areasData.find((a) => (a.cities as string[]).includes(cleaner.city))
-    : undefined;
-  const areaPath = area?.id === "temecula-valley" ? "/" : `/${area?.id ?? ""}`;
-  const areaLabel = area ? `All house cleaners in ${area.displayName}` : "All house cleaners";
-
-  const relatedCleaners = cleaner
-    ? cleanersData.filter((c) => c.city === cleaner.city && c.id !== cleaner.id).slice(0, 3)
-    : [];
-
-  useEffect(() => {
-    if (!cleaner) return;
-    const slug = cleaner.id;
-    const pageUrl = `https://friendtested.pro/cleaners/${slug}`;
-
-    // Truncate description at last complete sentence under 155 chars
-    const raw = cleaner.description;
-    let metaDescText = raw.slice(0, 155);
-    const lastPeriod = metaDescText.lastIndexOf(".");
-    if (lastPeriod > 80) metaDescText = metaDescText.slice(0, lastPeriod + 1);
-
-    // Title + meta description
-    document.title = `${cleaner.name} | House Cleaning in ${cleaner.city}, CA | Friend Tested Cleaners`;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute("content", metaDescText);
-
-    // Canonical tag
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
-    }
-    canonical.href = pageUrl;
-
-    // Open Graph tags
-    const ogTags: Record<string, string> = {
-      "og:title": `${cleaner.name} | House Cleaning in ${cleaner.city}, CA`,
-      "og:description": metaDescText,
-      "og:url": pageUrl,
-      "og:type": "website",
-      "twitter:title": `${cleaner.name} | House Cleaning in ${cleaner.city}, CA`,
-      "twitter:description": metaDescText,
-    };
-    const createdMeta: HTMLMetaElement[] = [];
-    for (const [property, content] of Object.entries(ogTags)) {
-      const attr = property.startsWith("twitter:") ? "name" : "property";
-      let tag = document.querySelector(`meta[${attr}="${property}"]`) as HTMLMetaElement | null;
-      if (!tag) {
-        tag = document.createElement("meta");
-        tag.setAttribute(attr, property);
-        document.head.appendChild(tag);
-        createdMeta.push(tag);
-      }
-      tag.setAttribute("content", content);
-    }
-
-    // JSON-LD: LocalBusiness + BreadcrumbList
-    const schema = {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "LocalBusiness",
-          "@id": pageUrl,
-          "name": cleaner.name,
-          "description": cleaner.description,
-          "telephone": cleaner.phone,
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": cleaner.address,
-            "addressLocality": cleaner.city,
-            "addressRegion": "CA",
-            "addressCountry": "US"
-          },
-          "areaServed": cleaner.serviceArea.map((area) => ({
-            "@type": "City",
-            "name": area
-          })),
-          "url": pageUrl,
-          "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Cleaning Services",
-            "itemListElement": cleaner.services.map((s) => ({
-              "@type": "Offer",
-              "itemOffered": { "@type": "Service", "name": s }
-            }))
-          }
-        },
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://friendtested.pro/" },
-            { "@type": "ListItem", "position": 2, "name": `House Cleaners in ${cleaner.city}`, "item": "https://friendtested.pro/" },
-            { "@type": "ListItem", "position": 3, "name": cleaner.name, "item": pageUrl }
-          ]
-        }
-      ]
-    };
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "cleaner-jsonld";
-    script.textContent = JSON.stringify(schema);
-    document.head.querySelector("#cleaner-jsonld")?.remove();
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.querySelector("#cleaner-jsonld")?.remove();
-      canonical?.remove();
-      createdMeta.forEach((tag) => tag.remove());
-    };
-  }, [cleaner]);
-
-  if (!cleaner) return <Navigate to="/" replace />;
+  const relatedCleaners = cleanersData
+    .filter((c) => c.city === cleaner.city && c.id !== cleaner.id)
+    .slice(0, 3)
 
   function handlePhoneClick() {
     posthog.capture("phone_number_clicked", {
-      cleaner_id: cleaner!.id,
-      cleaner_name: cleaner!.name,
-      cleaner_city: cleaner!.city,
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
       page: "cleaner_detail",
-    });
+    })
   }
 
   function handleBookOnline() {
     posthog.capture("book_online_clicked", {
-      cleaner_id: cleaner!.id,
-      cleaner_name: cleaner!.name,
-      cleaner_city: cleaner!.city,
+      cleaner_id: cleaner.id,
+      cleaner_name: cleaner.name,
+      cleaner_city: cleaner.city,
       page: "cleaner_detail",
-    });
-    setBookingOpen(true);
+    })
+    setBookingOpen(true)
   }
 
   return (
@@ -165,14 +65,14 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
         <img src={logo} alt="Friend Tested Cleaners" className="h-14 w-auto" />
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
-          {area?.displayName ?? cleaner?.city}, CA
+          {area?.displayName ?? cleaner.city}, CA
         </span>
       </header>
 
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 md:px-8 py-10">
         {/* ── Back link ── */}
         <Link
-          to={areaPath}
+          href={areaPath}
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -204,18 +104,16 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
             <Phone className="w-5 h-5 shrink-0" />
             {cleaner.phone}
           </a>
-          <Button
-            size="lg"
-            onClick={handleBookOnline}
-            className="sm:ml-auto"
-          >
+          <Button size="lg" onClick={handleBookOnline} className="sm:ml-auto">
             Book Online
           </Button>
         </div>
 
         {/* ── Services ── */}
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-foreground mb-3">Services Offered</h2>
+          <h2 className="text-lg font-bold text-foreground mb-3">
+            Services Offered
+          </h2>
           <div className="flex flex-wrap gap-2">
             {cleaner.services.map((service) => (
               <span
@@ -240,10 +138,13 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
 
         {/* ── Service area ── */}
         <div className="mb-10 p-5 rounded-[var(--radius)] border border-border/60 bg-secondary/30">
-          <h2 className="text-base font-semibold text-foreground mb-1">Service Area</h2>
+          <h2 className="text-base font-semibold text-foreground mb-1">
+            Service Area
+          </h2>
           <p className="text-sm text-muted-foreground">
             {cleaner.name} serves homeowners in{" "}
-            {cleaner.serviceArea.join(", ")} and surrounding {area?.name ?? cleaner.city} communities.
+            {cleaner.serviceArea.join(", ")} and surrounding{" "}
+            {area?.name ?? cleaner.city} communities.
           </p>
         </div>
 
@@ -257,7 +158,7 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
               {relatedCleaners.map((related) => (
                 <Link
                   key={related.id}
-                  to={`/cleaners/${related.id}`}
+                  href={`/cleaners/${related.id}`}
                   className="flex items-center justify-between px-4 py-3 rounded-[var(--radius)] border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all group"
                 >
                   <div>
@@ -273,10 +174,7 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
               ))}
             </div>
             <div className="mt-4">
-              <Link
-                to={areaPath}
-                className="text-sm text-primary hover:underline"
-              >
+              <Link href={areaPath} className="text-sm text-primary hover:underline">
                 {areaLabel} →
               </Link>
             </div>
@@ -298,8 +196,8 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
           <DialogHeader>
             <DialogTitle>Online Booking Unavailable</DialogTitle>
             <DialogDescription>
-              {cleaner.name} doesn't support online booking yet. Please call
-              them directly to schedule:
+              {cleaner.name} doesn&apos;t support online booking yet. Please
+              call them directly to schedule:
             </DialogDescription>
           </DialogHeader>
           <a
@@ -313,5 +211,5 @@ export function CleanerPage({ theme }: { theme: "a" | "b" }) {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

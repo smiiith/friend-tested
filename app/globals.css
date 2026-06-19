@@ -50,7 +50,6 @@
     --ring: 14 72% 44%;
     --radius: 0.75rem;
   }
-
 }
 
 @layer base {
@@ -63,9 +62,6 @@
       "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     margin: 0;
-    min-height: 100vh;
-  }
-  #root {
     min-height: 100vh;
   }
 }

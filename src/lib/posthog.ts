@@ -1,19 +1,19 @@
 import posthog from "posthog-js"
 
-const key = import.meta.env.VITE_POSTHOG_KEY as string | undefined
-
-if (key) {
-  posthog.init(key, {
-    // Use VITE_POSTHOG_HOST for EU region: https://eu.i.posthog.com
-    api_host: (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ?? `${window.location.origin}/ingest`,
-    // Only create person profiles when identify() is called — better for privacy
-    person_profiles: "identified_only",
-    // Automatic pageview + click/form/input capture
-    capture_pageview: true,
-    autocapture: true,
-  })
-} else if (import.meta.env.DEV) {
-  console.warn("[PostHog] VITE_POSTHOG_KEY is not set — tracking disabled.")
+// Initialize at module scope so PostHog is ready before any React effects run.
+// The typeof window guard prevents this from executing during SSR.
+if (typeof window !== "undefined") {
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  if (key) {
+    posthog.init(key, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "/ingest",
+      person_profiles: "identified_only",
+      capture_pageview: true,
+      autocapture: true,
+    })
+  } else if (process.env.NODE_ENV === "development") {
+    console.warn("[PostHog] NEXT_PUBLIC_POSTHOG_KEY is not set — tracking disabled.")
+  }
 }
 
 export { posthog }

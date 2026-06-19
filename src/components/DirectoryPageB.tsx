@@ -1,85 +1,38 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Phone, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { Phone, MapPin } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { posthog } from "@/lib/posthog";
-import { setPageSeo } from "@/lib/seo";
-import cleanersData from "@/data/cleaners.json";
-import neighborhoodsData from "@/data/neighborhoods.json";
-import areasData from "@/data/areas.json";
+} from "@/components/ui/dialog"
+import { posthog } from "@/lib/posthog"
+import cleanersData from "@/data/cleaners.json"
+import neighborhoodsData from "@/data/neighborhoods.json"
+import areasData from "@/data/areas.json"
 
-type Cleaner = (typeof cleanersData)[0];
-type Area = (typeof areasData)[0];
+type Cleaner = (typeof cleanersData)[0]
+type Area = (typeof areasData)[0]
 
 export function DirectoryPageB({ area }: { area: Area }) {
-  const [filter, setFilter] = useState<string>("all");
-  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null);
+  const [filter, setFilter] = useState<string>("all")
+  const [bookingCleaner, setBookingCleaner] = useState<Cleaner | null>(null)
 
   const areaCleaners = cleanersData.filter((c) =>
     (area.cities as string[]).includes(c.city),
-  );
+  )
   const areaNeighborhoods = neighborhoodsData.filter((n) =>
     (area.cities as string[]).includes(n.city),
-  );
+  )
   const filtered =
     filter === "all"
       ? areaCleaners
-      : areaCleaners.filter((c) => c.city === filter);
-
-  useEffect(() => {
-    setPageSeo({
-      title: area.seo.title,
-      description: area.seo.description,
-      canonical: area.canonical,
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "WebPage",
-            "@id": area.canonical,
-            url: area.canonical,
-            name: `House Cleaners in ${area.displayName}, CA`,
-            description: area.seo.description,
-            isPartOf: { "@id": "https://friendtested.pro/#website" },
-          },
-          {
-            "@type": "ItemList",
-            name: `House Cleaners in ${area.displayName}, CA`,
-            description: area.seo.description,
-            url: area.canonical,
-            itemListElement: areaCleaners.map((cleaner, idx) => ({
-              "@type": "ListItem",
-              position: idx + 1,
-              item: {
-                "@type": "HomeAndConstructionBusiness",
-                "@id": `https://friendtested.pro/cleaners/${cleaner.id}`,
-                name: cleaner.name,
-                telephone: cleaner.phone,
-                address: cleaner.address,
-                url: `https://friendtested.pro/cleaners/${cleaner.id}`,
-                areaServed: cleaner.serviceArea.map((city) => ({
-                  "@type": "City",
-                  name: city,
-                })),
-              },
-            })),
-          },
-        ],
-      },
-    });
-  }, [area, areaCleaners]);
-
-  // Reset city filter when area changes
-  useEffect(() => {
-    setFilter("all");
-  }, [area.id]);
+      : areaCleaners.filter((c) => c.city === filter)
 
   function handlePhoneClick(cleaner: Cleaner) {
     posthog.capture("phone_number_clicked", {
@@ -88,7 +41,7 @@ export function DirectoryPageB({ area }: { area: Area }) {
       cleaner_city: cleaner.city,
       page: "directory",
       area: area.id,
-    });
+    })
   }
 
   function handleBookOnline(cleaner: Cleaner) {
@@ -98,16 +51,16 @@ export function DirectoryPageB({ area }: { area: Area }) {
       cleaner_city: cleaner.city,
       page: "directory",
       area: area.id,
-    });
-    setBookingCleaner(cleaner);
+    })
+    setBookingCleaner(cleaner)
   }
 
   function handleCityFilter(city: string) {
     posthog.capture("city_filter_clicked", {
       city,
       area: area.id,
-    });
-    setFilter(city);
+    })
+    setFilter(city)
   }
 
   return (
@@ -173,7 +126,7 @@ export function DirectoryPageB({ area }: { area: Area }) {
               {areaNeighborhoods.map((n) => (
                 <Link
                   key={n.id}
-                  to={`/neighborhoods/${n.id}`}
+                  href={`/neighborhoods/${n.id}`}
                   className="px-3 py-1.5 rounded-full border border-border bg-card text-sm font-medium text-foreground hover:border-primary/50 hover:text-primary transition-colors"
                 >
                   {n.name}, {n.city}
@@ -204,15 +157,15 @@ export function DirectoryPageB({ area }: { area: Area }) {
       <Dialog
         open={bookingCleaner !== null}
         onOpenChange={(open) => {
-          if (!open) setBookingCleaner(null);
+          if (!open) setBookingCleaner(null)
         }}
       >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Online Booking Unavailable</DialogTitle>
             <DialogDescription>
-              {bookingCleaner?.name} doesn't support online booking yet. Please
-              call them directly to schedule:
+              {bookingCleaner?.name} doesn&apos;t support online booking yet.
+              Please call them directly to schedule:
             </DialogDescription>
           </DialogHeader>
           {bookingCleaner && (
@@ -228,7 +181,7 @@ export function DirectoryPageB({ area }: { area: Area }) {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
 
 function CleanerCardB({
@@ -236,9 +189,9 @@ function CleanerCardB({
   onPhoneClick,
   onBookOnline,
 }: {
-  cleaner: Cleaner;
-  onPhoneClick: () => void;
-  onBookOnline: () => void;
+  cleaner: Cleaner
+  onPhoneClick: () => void
+  onBookOnline: () => void
 }) {
   return (
     <div className="rounded-[var(--radius)] border border-border bg-card shadow-sm overflow-hidden flex flex-col">
@@ -254,7 +207,7 @@ function CleanerCardB({
 
         {/* Name — links to detail page */}
         <Link
-          to={`/cleaners/${cleaner.id}`}
+          href={`/cleaners/${cleaner.id}`}
           className="font-bold text-lg text-foreground hover:text-primary hover:underline leading-snug mb-2"
         >
           {cleaner.name}
@@ -293,5 +246,5 @@ function CleanerCardB({
         </div>
       </div>
     </div>
-  );
+  )
 }

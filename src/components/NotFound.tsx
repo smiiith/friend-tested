@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link"
 
 export function NotFound() {
   return (
@@ -10,14 +10,14 @@ export function NotFound() {
       />
       <h1 className="text-5xl font-extrabold text-foreground mb-3">404</h1>
       <p className="text-muted-foreground mb-6 max-w-sm">
-        That area isn't on our map yet. Try one of our supported cities.
+        That area isn&apos;t on our map yet. Try one of our supported cities.
       </p>
       <Link
-        to="/"
+        href="/"
         className="text-sm font-semibold text-primary hover:underline"
       >
         ← Back to Temecula Valley
       </Link>
     </div>
-  );
+  )
 }
